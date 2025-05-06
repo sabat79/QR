@@ -3,123 +3,85 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>QR Hra - Otázka 3</title>
+  <title>QR Hra – Otázka 3</title>
   <style>
     body {
       font-family: sans-serif;
       padding: 20px;
-      background-color: #f9f9f9;
       text-align: center;
     }
-    h2 {
-      margin-bottom: 20px;
-    }
     button {
-      display: block;
-      width: 100%;
-      max-width: 300px;
-      margin: 10px auto;
-      padding: 15px;
-      font-size: 16px;
-      border: none;
-      border-radius: 8px;
-      background-color: #4CAF50;
-      color: white;
-      cursor: pointer;
-    }
-    button:disabled {
-      background-color: grey;
-      cursor: not-allowed;
-    }
-    #continue-container {
-      margin-top: 30px;
-    }
-    #continue-container a {
-      display: inline-block;
-      margin-top: 10px;
+      margin: 10px;
       padding: 12px 20px;
-      background-color: #2196F3;
-      color: white;
-      text-decoration: none;
-      border-radius: 6px;
       font-size: 16px;
     }
-    #waiting-message {
-      display: none;
+    #countdown-text {
+      font-size: 20px;
       margin-top: 20px;
-      font-size: 18px;
-      color: #d32f2f;
+      color: red;
     }
   </style>
 </head>
 <body>
+
 <script>
+  if (!localStorage.getItem("hesloOK")) {
     var heslo = prompt("Zadej heslo pro vstup:");
     if (heslo !== "casper") {
       alert("Špatné heslo. Přístup zamítnut.");
       window.location.href = "https://seznam.cz";
+    } else {
+      localStorage.setItem("hesloOK", "true");
     }
-  </script>
+  }
+</script>
 
-  <h2>Jak se jmenuje tvůj pes?</h2>
-  <div id="question-buttons">
-    <button onclick="checkAnswer('a')" id="btnA">a) Trace</button>
-    <button onclick="checkAnswer('b')" id="btnB">b) Rek</button>
-    <button onclick="checkAnswer('c')" id="btnC">c) Fik</button>
-    <button onclick="checkAnswer('d')" id="btnD">d) Brok</button>
-  </div>
+<h2>Jak se jmenuje tvůj pes?</h2>
 
-  <div id="waiting-message">Špatná odpověď. Počkej 5 minut...<br><strong>Najdi předmět začínající na „P“</strong></div>
+<div id="question-section">
+  <button onclick="checkAnswer('a')">a) Trace</button>
+  <button onclick="checkAnswer('b')">b) Rek</button>
+  <button onclick="checkAnswer('c')">c) Fik</button>
+  <button onclick="checkAnswer('d')">d) Brok</button>
+</div>
 
-  <div id="continue-container" style="display: none;">
-    <h2>Děkujeme!</h2>
-    <a href="https://mapy.cz/s/banevazete" target="_blank">Pokračuj dále:</a>
-  </div>
+<div id="result-section" style="display:none;">
+  <h2>Správně!</h2>
+  <a href="https://mapy.cz/s/banevazete" target="_blank">Pokračuj dále:</a>
+</div>
 
-  <script>
-    const buttons = ['btnA', 'btnB', 'btnC', 'btnD'];
+<div id="wrong-answer" style="display:none;">
+  <h2>Špatná odpověď!</h2>
+  <p>Najdi předmět začínající na <strong>"P"</strong></p>
+  <div id="countdown-text"></div>
+</div>
 
-    function checkCooldown() {
-      const lockTime = localStorage.getItem('wrongAnswerUntil');
-      const now = Date.now();
-      if (lockTime && now < parseInt(lockTime)) {
-        showWaitMessage();
-        return true;
-      }
-      return false;
+<script>
+  function checkAnswer(answer) {
+    if (answer === "a") {
+      document.getElementById("question-section").style.display = "none";
+      document.getElementById("result-section").style.display = "block";
+    } else {
+      document.getElementById("question-section").style.display = "none";
+      document.getElementById("wrong-answer").style.display = "block";
+
+      let seconds = 300; // 5 minut
+      const countdownText = document.getElementById("countdown-text");
+
+      const interval = setInterval(() => {
+        let min = Math.floor(seconds / 60);
+        let sec = seconds % 60;
+        countdownText.innerText = `Zbývá: ${min}:${sec < 10 ? '0' : ''}${sec}`;
+        seconds--;
+
+        if (seconds < 0) {
+          clearInterval(interval);
+          location.reload();
+        }
+      }, 1000);
     }
-
-    function disableButtons(state) {
-      buttons.forEach(id => {
-        document.getElementById(id).disabled = state;
-      });
-    }
-
-    function showWaitMessage() {
-      document.getElementById("question-buttons").style.display = "none";
-      document.getElementById("waiting-message").style.display = "block";
-    }
-
-    function checkAnswer(choice) {
-      if (checkCooldown()) return;
-
-      if (choice === 'a') {
-        document.getElementById("continue-container").style.display = "block";
-        document.getElementById("question-buttons").style.display = "none";
-      } else {
-        const waitUntil = Date.now() + 5 * 60 * 1000;
-        localStorage.setItem('wrongAnswerUntil', waitUntil);
-        showWaitMessage();
-      }
-    }
-
-    // Kontrola po načtení
-    window.onload = function () {
-      if (checkCooldown()) {
-        disableButtons(true);
-      }
-    }
-  </script>
+  }
+</script>
 
 </body>
 </html>
