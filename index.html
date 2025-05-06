@@ -54,19 +54,20 @@
         formData.append('email', 'sabat.pavel@seznam.cz');
         
         // Odeslání odpovědi na email
-        fetch('https://formspree.io/f/maykjzob', {  // Použij svůj Formspree endpoint nebo API
-          method: 'POST',
-          body: formData
-        }).then(response => {
-          if (response.ok) {
-            document.getElementById("question-container").style.display = "none";
-            document.getElementById("continue-container").style.display = "block";
-          } else {
-            alert("Došlo k chybě při odesílání odpovědi.");
-          }
-        }).catch(error => {
-          alert("Chyba při odesílání odpovědi.");
-        });
+        fetch('https://formspree.io/f/xldbbzew', {  // Sem vlož svůj Formspree endpoint
+  method: 'POST',
+  body: formData
+}).then(response => {
+  if (response.ok) {
+    document.getElementById("question-container").style.display = "none";
+    document.getElementById("continue-container").style.display = "block";
+  } else {
+    alert("Došlo k chybě při odesílání odpovědi.");
+  }
+}).catch(error => {
+  alert("Chyba při odesílání odpovědi.");
+});
+
       } else {
         alert("Nejprve vyberte odpověď.");
       }
