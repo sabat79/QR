@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="cs">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>QR Hra – Otázka 3</title>
   <style>
     body {
@@ -46,75 +46,89 @@
     #continue-container a:hover {
       background-color: #0b7dda;
     }
-    #wrong-answer h2,
-    #countdown-text {
+    #cooldown-message {
       color: red;
-    }
-    #countdown-text {
-      font-size: 20px;
+      font-weight: bold;
       margin-top: 20px;
+      font-size: 18px;
     }
   </style>
 </head>
 <body>
 
 <script>
-  if (!localStorage.getItem("hesloOK")) {
+  // Heslo na začátku stránky (nebude se znovu ptát při refreshi)
+  if (!localStorage.getItem("access_granted")) {
     var heslo = prompt("Zadej heslo pro vstup:");
     if (heslo !== "casper") {
       alert("Špatné heslo. Přístup zamítnut.");
       window.location.href = "https://seznam.cz";
     } else {
-      localStorage.setItem("hesloOK", "true");
+      localStorage.setItem("access_granted", "true");
     }
   }
+
+  // Funkce pro spuštění odpočtu
+  function startCooldown() {
+    const cooldownTime = 30 * 1000; // 5 minut v milisekundách
+    const unlockTime = Date.now() + cooldownTime;
+    localStorage.setItem("cooldown_until", unlockTime.toString());
+    showCooldown();
+  }
+
+  function showCooldown() {
+    const container = document.getElementById("cooldown-message");
+    const question = document.getElementById("question-container");
+    const interval = setInterval(() => {
+      const now = Date.now();
+      const unlock = parseInt(localStorage.getItem("cooldown_until") || "0");
+      const diff = unlock - now;
+
+      if (diff <= 0) {
+        clearInterval(interval);
+        localStorage.removeItem("cooldown_until");
+        location.reload(); // Reload bez nového hesla
+      } else {
+        const minutes = Math.floor(diff / 60000);
+        const seconds = Math.floor((diff % 60000) / 1000);
+        container.innerHTML = `Špatná odpověď! Počkej <b>${minutes}:${seconds.toString().padStart(2, '0')}</b> a zatím najdi předmět začínající na <b>P</b>.`;
+        question.style.display = "none";
+        container.style.display = "block";
+      }
+    }, 1000);
+  }
+
+  // Při načtení stránky zkontroluj, zda je blok aktivní
+  window.onload = function () {
+    const unlock = parseInt(localStorage.getItem("cooldown_until") || "0");
+    if (Date.now() < unlock) {
+      showCooldown();
+    }
+  };
 </script>
 
-<h2>Jak se jmenuje tvůj pes?</h2>
-
-<div id="question-section">
-  <button onclick="checkAnswer('trace')">a) Trace</button>
-  <button onclick="checkAnswer('rek')">b) Rek</button>
-  <button onclick="checkAnswer('fik')">c) Fik</button>
-  <button onclick="checkAnswer('brok')">d) Brok</button>
+<div id="question-container">
+  <h2>Jak se jmenuje tvůj pes?</h2>
+  <button onclick="checkAnswer('a')">a) Trace</button>
+  <button onclick="checkAnswer('b')">b) Rek</button>
+  <button onclick="checkAnswer('c')">c) Fík</button>
+  <button onclick="checkAnswer('d')">d) Brok</button>
 </div>
 
-<div id="result-section" style="display:none;">
+<div id="continue-container" style="display: none;">
   <h2>Děkujeme!</h2>
-  <div id="continue-container">
-    <a href="https://mapy.cz/s/banevazete" target="_blank">Pokračuj dále:</a>
-  </div>
+  <a href="geo:0,0?q=https://mapy.cz/s/banevazete">Pokračuj dále:</a>
 </div>
 
-<div id="wrong-answer" style="display:none;">
-  <h2>Špatná odpověď!</h2>
-  <p>Najdi předmět začínající na <strong>"P"</strong></p>
-  <div id="countdown-text"></div>
-</div>
+<div id="cooldown-message" style="display: none;"></div>
 
 <script>
   function checkAnswer(answer) {
-    if (answer === "trace") {
-      document.getElementById("question-section").style.display = "none";
-      document.getElementById("result-section").style.display = "block";
+    if (answer === "a") {
+      document.getElementById("question-container").style.display = "none";
+      document.getElementById("continue-container").style.display = "block";
     } else {
-      document.getElementById("question-section").style.display = "none";
-      document.getElementById("wrong-answer").style.display = "block";
-
-      let seconds = 30;
-      const countdownText = document.getElementById("countdown-text");
-
-      const interval = setInterval(() => {
-        let min = Math.floor(seconds / 60);
-        let sec = seconds % 60;
-        countdownText.innerText = `Zbývá: ${min}:${sec < 10 ? '0' : ''}${sec}`;
-        seconds--;
-
-        if (seconds < 0) {
-          clearInterval(interval);
-          location.reload();
-        }
-      }, 1000);
+      startCooldown();
     }
   }
 </script>
