@@ -107,15 +107,18 @@
   }
 
   // Při načtení stránky zkontroluj, zda je blok aktivní
-  window.onload = function () {
-    const unlock = parseInt(localStorage.getItem("cooldown_until") || "0");
-    if (Date.now() < unlock) {
-      showCooldown();
-    }
-  };
+  
+  window.onload = function() {
+  const cooldownUntil = parseInt(localStorage.getItem("cooldown_until") || "0");
+  if (Date.now() < cooldownUntil) {
+    showCooldown(); // stále běží penalizace
+  } else {
+    document.getElementById("question-container").style.display = "block"; // zobraz otázky
+  }
+};
 </script>
 
-<div id="question-container">
+<div id="question-container" style="display: none;">
   <h2>Jak se jmenuje tvůj pes?</h2>
   <button onclick="checkAnswer('a')">a) Trace</button>
   <button onclick="checkAnswer('b')">b) Rek</button>
