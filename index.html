@@ -1,125 +1,62 @@
 <!DOCTYPE html>
 <html lang="cs">
 <head>
-  
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QR Kód a Otázky</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
-            margin: 0;
-            padding: 20px;
-        }
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        #question-container {
-            display: none;
-        }
-        #continue-container {
-            display: none;
-            text-align: center;
-        }
-        #login-container {
-            display: block;
-        }
-        button {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            border-radius: 4px;
-            margin: 10px 0;
-            width: 100%;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-        input[type="password"] {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QR Hra</title>
 </head>
 <body>
 
-<div class="container">
-    <div id="login-container">
-        <h2>Chcete-li pokračovat, zadejte heslo:</h2>
-        <input type="password" id="password" placeholder="Zadejte heslo" />
-        <button onclick="checkPassword()">Přihlásit se</button>
-        <p id="error-message" style="color: red; display: none;">Špatné heslo, zkuste to znovu.</p>
-    </div>
-
-    <div id="question-container">
-        <h2>Vyber svou odpověď:</h2>
-        <h3>Jakou destinaci bys ráda navštívila?</h3>
-        <form id="quiz-form">
-            <label><input type="radio" name="destination" value="Itálie"> Itálie</label><br>
-            <label><input type="radio" name="destination" value="Španělsko"> Španělsko</label><br>
-            <label><input type="radio" name="destination" value="Rakousko"> Rakousko</label><br>
-            <label><input type="radio" name="destination" value="Francie"> Francie</label><br>
-            <button type="button" onclick="submitAnswer()">Odeslat odpověď</button>
-        </form>
-    </div>
-
-    <div id="continue-container">
-        <h3>Odpověď byla odeslána!</h3>
-        <p>Děkujeme za odpověď. Klikni na tlačítko níže pro pokračování na mapu.</p>
-        <a href="https://mapy.cz/s/kupakodobo" target="_blank">
-            <button>Pokračuj na mapu</button>
-        </a>
-    </div>
-</div>
-
-<script>
-    function checkPassword() {
-        var password = document.getElementById("password").value;
-        if (password === "casper") {
-            document.getElementById("login-container").style.display = "none";
-            document.getElementById("question-container").style.display = "block";
-        } else {
-            document.getElementById("error-message").style.display = "block";
-        }
+  <script>
+    var heslo = prompt("Zadej heslo pro vstup:");
+    if (heslo !== "casper") {
+      alert("Špatné heslo. Přístup zamítnut.");
+      window.location.href = "https://seznam.cz";
     }
+  </script>
 
-    function submitAnswer() {
-        var selectedOption = document.querySelector('input[name="destination"]:checked');
-        if (!selectedOption) {
-            alert("Prosím vyber odpověď.");
-            return;
-        }
+  <div id="question-container" style="display: none;">
+    <h2>Jakou destinaci bys ráda navštívila?</h2>
+    <form id="question-form" action="https://formspree.io/f/xldbbzew" method="POST">
+      <label>
+        <input type="radio" name="answer" value="Itálie"> Itálie
+      </label><br>
+      <label>
+        <input type="radio" name="answer" value="Španělsko"> Španělsko
+      </label><br>
+      <label>
+        <input type="radio" name="answer" value="Rakousko"> Rakousko
+      </label><br>
+      <label>
+        <input type="radio" name="answer" value="Francie"> Francie
+      </label><br><br>
+      <input type="email" name="email" placeholder="Váš e-mail" required><br><br>
+      <button type="submit">Odeslat odpověď</button>
+    </form>
+  </div>
 
-        var formData = new FormData();
-        formData.append("destination", selectedOption.value);
+  <div id="continue-container" style="display: none;">
+    <h2>Odpověď byla odeslána! Klikněte na odkaz pro pokračování.</h2>
+    <a href="https://mapy.cz/s/kupakodobo" target="_blank">Pokračuj na Mapy.cz</a>
+  </div>
 
-        fetch('https://formspree.io/f/xldbbzew', {  // Sem vlož svůj Formspree endpoint
-            method: 'POST',
-            body: formData
-        }).then(response => {
-            if (response.ok) {
-                document.getElementById("question-container").style.display = "none";
-                document.getElementById("continue-container").style.display = "block";
-            } else {
-                alert("Došlo k chybě při odesílání odpovědi.");
-            }
-        }).catch(error => {
-            alert("Chyba při odesílání odpovědi.");
-        });
-    }
-</script>
+  <script>
+    // Zobrazit otázku po správném heslu
+    document.getElementById("question-container").style.display = "block";
+
+    // Funkce pro odeslání odpovědi
+    document.getElementById("question-form").onsubmit = function(event) {
+      event.preventDefault();  // Zabránit standardnímu odeslání formuláře
+
+      var selectedAnswer = document.querySelector('input[name="answer"]:checked');
+      if (selectedAnswer) {
+        document.getElementById("question-container").style.display = "none";
+        document.getElementById("continue-container").style.display = "block";
+      } else {
+        alert("Nejprve vyberte odpověď.");
+      }
+    };
+  </script>
 
 </body>
 </html>
