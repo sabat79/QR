@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>QR Hra - Otázka 10</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+      background-color: #f9f9f9;
+      text-align: center;
+    }
+    h2 {
+      margin-bottom: 20px;
+    }
+    button {
+      display: block;
+      width: 100%;
+      max-width: 300px;
+      margin: 10px auto;
+      padding: 15px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      background-color: #4CAF50;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    #continue-container {
+      margin-top: 30px;
+    }
+    #continue-container a {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 12px 20px;
+      background-color: #2196F3;
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+      font-size: 16px;
+    }
+    #continue-container a:hover {
+      background-color: #0b7dda;
+    }
+  </style>
+</head>
+<body>
+<script>
+    var heslo = prompt("Zadej heslo pro vstup:");
+    if (heslo !== "casper") {
+      alert("Špatné heslo. Přístup zamítnut.");
+      window.location.href = "https://seznam.cz";
+    }
+  </script>
+  <h2>Jak se jmenuje tvůj pes?</h2>
+  <button onclick="checkAnswer('a')">a) Trace</button>
+  <button onclick="checkAnswer('b')">b) Rek</button>
+  <button onclick="checkAnswer('c')">c) Fik</button>
+  <button onclick="checkAnswer('d')">d) Brok</button>
+  
+  <div id="continue-container" style="display: none;">
+    <h2>Správně!</h2>
+    <a href="geo:0,0?q=https://mapy.cz/s/banevazete" target="_blank">Pokračuj dále:</a>
+  </div>
+
+  <script>
+    function checkAnswer(choice) {
+      if (choice === 'a') {
+        document.getElementById("continue-container").style.display = "block";
+      } else {
+        alert("Špatná odpověď, zkus to znovu.");
+      }
+    }
+  </script>
+
+</body>
+</html>
