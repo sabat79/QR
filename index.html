@@ -1,75 +1,84 @@
 <!DOCTYPE html>
 <html lang="cs">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>QR Hra</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-    }
-    #question-container, #continue-container {
-      background: white;
+      font-family: sans-serif;
       padding: 20px;
-      border-radius: 10px;
-      max-width: 400px;
-      width: 100%;
+      background-color: #f4f4f4;
       text-align: center;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h2 {
+      margin-bottom: 20px;
     }
     button {
+      display: block;
       width: 100%;
-      padding: 12px;
-      margin: 10px 0;
+      max-width: 300px;
+      margin: 10px auto;
+      padding: 15px;
       font-size: 16px;
-      background-color: #4CAF50;
       border: none;
+      border-radius: 8px;
+      background-color: #4CAF50;
       color: white;
-      border-radius: 5px;
       cursor: pointer;
     }
     button:hover {
       background-color: #45a049;
     }
-    a {
-      color: #007BFF;
-      text-decoration: none;
-      font-weight: bold;
+    #continue-container {
+      margin-top: 30px;
     }
   </style>
 </head>
 <body>
 
   <script>
-    const heslo = prompt("Zadej heslo pro vstup:");
+    var heslo = prompt("Zadej heslo pro vstup:");
     if (heslo !== "casper") {
       alert("Špatné heslo. Přístup zamítnut.");
       window.location.href = "https://seznam.cz";
     }
   </script>
 
-  <div id="question-container">
-    <h2>Jakou destinaci bys ráda navštívila?</h2>
-    <form id="odpoved-form" action="https://formspree.io/f/xldbbzew" method="POST">
-      <input type="hidden" name="odpoved" id="odpoved">
-      <input type="hidden" name="_redirect" value="https://sabat79.github.io/QR/dalsi.html">
-      <button type="button" onclick="odeslatOdpoved('Itálie')">Itálie</button>
-      <button type="button" onclick="odeslatOdpoved('Španělsko')">Španělsko</button>
-      <button type="button" onclick="odeslatOdpoved('Rakousko')">Rakousko</button>
-      <button type="button" onclick="odeslatOdpoved('Francie')">Francie</button>
-    </form>
+  <h2>Jakou destinaci bys ráda navštívila?</h2>
+  <form id="question-form">
+    <button type="button" onclick="submitAnswer('Itálie')">Itálie</button>
+    <button type="button" onclick="submitAnswer('Španělsko')">Španělsko</button>
+    <button type="button" onclick="submitAnswer('Rakousko')">Rakousko</button>
+    <button type="button" onclick="submitAnswer('Francie')">Francie</button>
+  </form>
+
+  <div id="continue-container" style="display: none;">
+    <h2>Děkujeme! Pokračuj dále:</h2>
+    <a href="https://mapy.cz/s/kupakodobo" target="_blank">Otevřít místo v Mapy.cz</a>
   </div>
 
   <script>
-    function odeslatOdpoved(odpoved) {
-      document.getElementById("odpoved").value = odpoved;
-      document.getElementById("odpoved-form").submit();
+    function submitAnswer(answer) {
+      const formData = new FormData();
+      formData.append('odpoved', answer);
+
+      fetch('https://formspree.io/f/xldbbzew', {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'Accept': 'application/json'
+        }
+      }).then(response => {
+        if (response.ok) {
+          document.getElementById("question-form").style.display = "none";
+          document.getElementById("continue-container").style.display = "block";
+        } else {
+          alert("Chyba při odesílání odpovědi.");
+        }
+      }).catch(error => {
+        alert("Chyba při odesílání.");
+      });
     }
   </script>
 
