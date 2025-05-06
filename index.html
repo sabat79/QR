@@ -18,6 +18,8 @@
   <div id="question-container" style="display: none;">
     <h2>Jakou destinaci bys ráda navštívila?</h2>
     <form id="question-form" action="https://formspree.io/f/xldbbzew" method="POST">
+      <input type="hidden" name="_subject" value="Odpověď na otázku" /> <!-- Předmět e-mailu -->
+      
       <label>
         <input type="radio" name="answer" value="Itálie"> Itálie
       </label><br>
@@ -30,6 +32,7 @@
       <label>
         <input type="radio" name="answer" value="Francie"> Francie
       </label><br><br>
+      
       <input type="email" name="email" placeholder="Váš e-mail" required><br><br>
       <button type="submit">Odeslat odpověď</button>
     </form>
