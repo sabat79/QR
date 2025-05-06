@@ -46,6 +46,14 @@
     #continue-container a:hover {
       background-color: #0b7dda;
     }
+    #wrong-answer h2,
+    #countdown-text {
+      color: red;
+    }
+    #countdown-text {
+      font-size: 20px;
+      margin-top: 20px;
+    }
   </style>
 </head>
 <body>
@@ -65,15 +73,17 @@
 <h2>Jak se jmenuje tvůj pes?</h2>
 
 <div id="question-section">
-  <button onclick="checkAnswer('a')">a) Trace</button>
-  <button onclick="checkAnswer('b')">b) Rek</button>
-  <button onclick="checkAnswer('c')">c) Fik</button>
-  <button onclick="checkAnswer('d')">d) Brok</button>
+  <button onclick="checkAnswer('trace')">a) Trace</button>
+  <button onclick="checkAnswer('rek')">b) Rek</button>
+  <button onclick="checkAnswer('fik')">c) Fik</button>
+  <button onclick="checkAnswer('brok')">d) Brok</button>
 </div>
 
 <div id="result-section" style="display:none;">
-  <h2>Správně!</h2>
-  <a href="https://mapy.cz/s/banevazete" target="_blank">Pokračuj dále:</a>
+  <h2>Děkujeme!</h2>
+  <div id="continue-container">
+    <a href="https://mapy.cz/s/banevazete" target="_blank">Pokračuj dále:</a>
+  </div>
 </div>
 
 <div id="wrong-answer" style="display:none;">
@@ -84,14 +94,14 @@
 
 <script>
   function checkAnswer(answer) {
-    if (answer === "a") {
+    if (answer === "trace") {
       document.getElementById("question-section").style.display = "none";
       document.getElementById("result-section").style.display = "block";
     } else {
       document.getElementById("question-section").style.display = "none";
       document.getElementById("wrong-answer").style.display = "block";
 
-      let seconds = 30; // 5 minut
+      let seconds = 30;
       const countdownText = document.getElementById("countdown-text");
 
       const interval = setInterval(() => {
