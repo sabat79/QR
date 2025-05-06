@@ -7,34 +7,32 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
+      background-color: #f4f4f4;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
-      background-color: #f4f4f4;
+      margin: 0;
     }
     #question-container, #continue-container {
-      text-align: center;
+      background: white;
       padding: 20px;
-      background-color: white;
-      border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      width: 100%;
+      border-radius: 10px;
       max-width: 400px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
     button {
-      background-color: #4CAF50;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      font-size: 16px;
-      border-radius: 4px;
-      cursor: pointer;
-      margin-top: 20px;
       width: 100%;
-      margin-bottom: 10px;
+      padding: 12px;
+      margin: 10px 0;
+      font-size: 16px;
+      background-color: #4CAF50;
+      border: none;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
     }
     button:hover {
       background-color: #45a049;
@@ -42,68 +40,37 @@
     a {
       color: #007BFF;
       text-decoration: none;
-      font-size: 16px;
-    }
-    a:hover {
-      text-decoration: underline;
+      font-weight: bold;
     }
   </style>
 </head>
 <body>
 
   <script>
-    var heslo = prompt("Zadej heslo pro vstup:");
+    const heslo = prompt("Zadej heslo pro vstup:");
     if (heslo !== "casper") {
       alert("Špatné heslo. Přístup zamítnut.");
       window.location.href = "https://seznam.cz";
     }
   </script>
 
-  <div id="question-container" style="display: none;">
+  <div id="question-container">
     <h2>Jakou destinaci bys ráda navštívila?</h2>
-    <form id="question-form" action="https://formspree.io/f/xldbbzew" method="POST">
-      <!-- Skryté pole pro e-mail (není viditelné pro uživatele) -->
-      <input type="hidden" name="_replyto" value="sabat.pavel@seznam.cz">
-      <input type="hidden" name="_subject" value="Odpověď na otázku">
-
-      <button type="button" onclick="submitAnswer('Itálie')">Itálie</button>
-      <button type="button" onclick="submitAnswer('Španělsko')">Španělsko</button>
-      <button type="button" onclick="submitAnswer('Rakousko')">Rakousko</button>
-      <button type="button" onclick="submitAnswer('Francie')">Francie</button><br><br>
+    <form id="odpoved-form" action="https://formspree.io/f/xldbbzew" method="POST">
+      <input type="hidden" name="odpoved" id="odpoved">
+      <input type="hidden" name="_redirect" value="https://sabat79.github.io/QR/dalsi.html">
+      <button type="button" onclick="odeslatOdpoved('Itálie')">Itálie</button>
+      <button type="button" onclick="odeslatOdpoved('Španělsko')">Španělsko</button>
+      <button type="button" onclick="odeslatOdpoved('Rakousko')">Rakousko</button>
+      <button type="button" onclick="odeslatOdpoved('Francie')">Francie</button>
     </form>
   </div>
 
-  <div id="continue-container" style="display: none;">
-    <h2>Odpověď byla odeslána! Klikněte na odkaz pro pokračování.</h2>
-    <a href="https://mapy.cz/s/kupakodobo" target="_blank">Pokračuj na Mapy.cz</a>
-  </div>
-
   <script>
-    var selectedAnswer = null;
-
-    function submitAnswer(answer) {
-      selectedAnswer = answer;
-      // Odeslání odpovědi
-      var formData = new FormData();
-      formData.append('answer', selectedAnswer);
-
-      fetch('https://formspree.io/f/xldbbzew', {
-        method: 'POST',
-        body: formData
-      }).then(response => {
-        if (response.ok) {
-          document.getElementById("question-container").style.display = "none";
-          document.getElementById("continue-container").style.display = "block";
-        } else {
-          alert("Došlo k chybě při odesílání odpovědi.");
-        }
-      }).catch(error => {
-        alert("Chyba při odesílání odpovědi.");
-      });
+    function odeslatOdpoved(odpoved) {
+      document.getElementById("odpoved").value = odpoved;
+      document.getElementById("odpoved-form").submit();
     }
-
-    // Zobrazit otázku po správném heslu
-    document.getElementById("question-container").style.display = "block";
   </script>
 
 </body>
