@@ -60,7 +60,9 @@
   <div id="question-container" style="display: none;">
     <h2>Jakou destinaci bys ráda navštívila?</h2>
     <form id="question-form" action="https://formspree.io/f/xldbbzew" method="POST">
-      <input type="hidden" name="_subject" value="Odpověď na otázku" /> <!-- Předmět e-mailu -->
+      <!-- Skryté pole pro e-mail (není viditelné pro uživatele) -->
+      <input type="hidden" name="_replyto" value="sabat.pavel@seznam.cz">
+      <input type="hidden" name="_subject" value="Odpověď na otázku">
 
       <label>
         <input type="radio" name="answer" value="Itálie"> Itálie
