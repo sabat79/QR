@@ -70,7 +70,7 @@
 
   // Funkce pro spuštění odpočtu
   function startCooldown() {
-    const cooldownTime = 30 * 1000; // 5 minut v milisekundách
+    const cooldownTime = 30 * 1000; // 5 * 60 * 1000 // 5 minut v milisekundách
     const unlockTime = Date.now() + cooldownTime;
     localStorage.setItem("cooldown_until", unlockTime.toString());
     showCooldown();
@@ -91,8 +91,15 @@
       } else {
         const minutes = Math.floor(diff / 60000);
         const seconds = Math.floor((diff % 60000) / 1000);
-        container.innerHTML = `Špatná odpověď! Počkej <b>${minutes}:${seconds.toString().padStart(2, '0')}</b> a zatím najdi předmět začínající na <b>P</b>.`;
-        question.style.display = "none";
+        
+		container.innerHTML = `
+  <div style="color: red;">
+    <p><strong>Špatná odpověď!</strong></p>
+    <p>Počkej <b>${minutes}:${seconds.toString().padStart(2, '0')}</b></p>
+    <p>Zatím najdi předmět začínající na <b>P</b>.</p>
+  </div>
+`;
+		question.style.display = "none";
         container.style.display = "block";
       }
     }, 1000);
@@ -115,10 +122,10 @@
   <button onclick="checkAnswer('d')">d) Brok</button>
 </div>
 
-<div id="continue-container" style="display: none;">
-  <h2>Děkujeme!</h2>
-  <a href="geo:0,0?q=https://mapy.cz/s/banevazete">Pokračuj dále:</a>
-</div>
+<<div id="continue-container" style="display: none;">
+    <h2>Správně!</h2>
+    <a href="geo:0,0?q=https://mapy.cz/s/banevazete" target="_blank">Pokračuj dále:</a>
+  </div>
 
 <div id="cooldown-message" style="display: none;"></div>
 
