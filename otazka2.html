@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="cs">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>QR Hra - Otázka 2</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>QR Hra – Otázka 2</title>
   <style>
     body {
       font-family: sans-serif;
@@ -46,36 +46,103 @@
     #continue-container a:hover {
       background-color: #0b7dda;
     }
+    #cooldown-message {
+      color: red;
+      font-weight: bold;
+      margin-top: 20px;
+      font-size: 18px;
+    }
   </style>
 </head>
 <body>
+
 <script>
+  // Heslo na začátku stránky (nebude se znovu ptát při refreshi)
+  if (!localStorage.getItem("access_granted")) {
     var heslo = prompt("Zadej heslo pro vstup:");
     if (heslo !== "casper") {
       alert("Špatné heslo. Přístup zamítnut.");
       window.location.href = "https://seznam.cz";
+    } else {
+      localStorage.setItem("access_granted", "true");
     }
-  </script>
-  <h2>Jak se jmenuje tvůj pes?</h2>
-  <button onclick="checkAnswer('a')">a) Trace</button>
-  <button onclick="checkAnswer('b')">b) Rek</button>
-  <button onclick="checkAnswer('c')">c) Fik</button>
-  <button onclick="checkAnswer('d')">d) Brok</button>
+  }
+
+  // Funkce pro spuštění odpočtu
+  function startCooldown() {
+    const cooldownTime = 30 * 1000; // 5 * 60 * 1000 // 5 minut v milisekundách
+    const unlockTime = Date.now() + cooldownTime;
+    localStorage.setItem("cooldown_until", unlockTime.toString());
+    showCooldown();
+  }
+
+  function showCooldown() {
+    const container = document.getElementById("cooldown-message");
+    const question = document.getElementById("question-container");
+    const interval = setInterval(() => {
+      const now = Date.now();
+      const unlock = parseInt(localStorage.getItem("cooldown_until") || "0");
+      const diff = unlock - now;
+
+      if (diff <= 0) {
+        clearInterval(interval);
+        localStorage.removeItem("cooldown_until");
+        location.reload(); // Reload bez nového hesla
+      } else {
+        const minutes = Math.floor(diff / 60000);
+        const seconds = Math.floor((diff % 60000) / 1000);
+        
+		container.innerHTML = `
+  <div style="color: red;">
+    <p><strong>Špatná odpověď!</strong></p>
+    <p>Počkej <b>${minutes}:${seconds.toString().padStart(2, '0')}</b></p>
+    <p><span style="color: black;">Zatím najdi předmět začínající na <b>"S"</b>.</span></p>
+  </div>
+`;
+
+		question.style.display = "none";
+        container.style.display = "block";
+      }
+    }, 1000);
+  }
+
+  // Při načtení stránky zkontroluj, zda je blok aktivní
   
-  <div id="continue-container" style="display: none;">
+  window.onload = function() {
+  const cooldownUntil = parseInt(localStorage.getItem("cooldown_until") || "0");
+  if (Date.now() < cooldownUntil) {
+    showCooldown(); // stále běží penalizace
+  } else {
+    document.getElementById("question-container").style.display = "block"; // zobraz otázky
+  }
+};
+</script>
+
+<div id="question-container" style="display: none;">
+  <h2>Jak se jmenuje tvoje první dítě?</h2>
+  <button onclick="checkAnswer('a')">a) Josífek</button>
+  <button onclick="checkAnswer('b')">b) Majda</button>
+  <button onclick="checkAnswer('c')">c) Radka</button>
+  <button onclick="checkAnswer('d')">d) Lenka</button>
+</div>
+
+<div id="continue-container" style="display: none;">
     <h2>Správně!</h2>
     <a href="geo:0,0?q=https://mapy.cz/s/banevazete" target="_blank">Pokračuj dále:</a>
   </div>
 
-  <script>
-    function checkAnswer(choice) {
-      if (choice === 'a') {
-        document.getElementById("continue-container").style.display = "block";
-      } else {
-        alert("Špatná odpověď, zkus to znovu.");
-      }
+<div id="cooldown-message" style="display: none;"></div>
+
+<script>
+  function checkAnswer(answer) {
+    if (answer === "b") {
+      document.getElementById("question-container").style.display = "none";
+      document.getElementById("continue-container").style.display = "block";
+    } else {
+      startCooldown();
     }
-  </script>
+  }
+</script>
 
 </body>
 </html>
