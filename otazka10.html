@@ -56,11 +56,11 @@
       window.location.href = "https://seznam.cz";
     }
   </script>
-  <h2>Jak se jmenuje tvůj pes?</h2>
-  <button onclick="checkAnswer('a')">a) Trace</button>
-  <button onclick="checkAnswer('b')">b) Rek</button>
-  <button onclick="checkAnswer('c')">c) Fik</button>
-  <button onclick="checkAnswer('d')">d) Brok</button>
+  <h2>Jaká je chemická značka zlata?</h2>
+  <button onclick="checkAnswer('a')">a) Ag</button>
+  <button onclick="checkAnswer('b')">b) Au</button>
+  <button onclick="checkAnswer('c')">c) Zn</button>
+  <button onclick="checkAnswer('d')">d) Hg</button>
   
   <div id="continue-container" style="display: none;">
     <h2>Správně!</h2>
@@ -69,7 +69,7 @@
 
   <script>
     function checkAnswer(choice) {
-      if (choice === 'a') {
+      if (choice === 'b') {
         document.getElementById("continue-container").style.display = "block";
       } else {
         alert("Špatná odpověď, zkus to znovu.");
