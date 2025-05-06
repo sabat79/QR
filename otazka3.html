@@ -27,8 +27,9 @@
       color: white;
       cursor: pointer;
     }
-    button:hover {
-      background-color: #45a049;
+    button:disabled {
+      background-color: grey;
+      cursor: not-allowed;
     }
     #continue-container {
       margin-top: 30px;
@@ -43,8 +44,11 @@
       border-radius: 6px;
       font-size: 16px;
     }
-    #continue-container a:hover {
-      background-color: #0b7dda;
+    #waiting-message {
+      display: none;
+      margin-top: 20px;
+      font-size: 18px;
+      color: #d32f2f;
     }
   </style>
 </head>
@@ -56,23 +60,63 @@
       window.location.href = "https://seznam.cz";
     }
   </script>
-  <h2>Jak se jmenuje tvoje první dítě?</h2>
-  <button onclick="checkAnswer('a')">a) Josífek</button>
-  <button onclick="checkAnswer('b')">b) Honzík</button>
-  <button onclick="checkAnswer('c')">c) Majda</button>
-  <button onclick="checkAnswer('d')">d) Lenka</button>
-  
+
+  <h2>Jak se jmenuje tvůj pes?</h2>
+  <div id="question-buttons">
+    <button onclick="checkAnswer('a')" id="btnA">a) Trace</button>
+    <button onclick="checkAnswer('b')" id="btnB">b) Rek</button>
+    <button onclick="checkAnswer('c')" id="btnC">c) Fik</button>
+    <button onclick="checkAnswer('d')" id="btnD">d) Brok</button>
+  </div>
+
+  <div id="waiting-message">Špatná odpověď. Počkej 5 minut...<br><strong>Najdi předmět začínající na „P“</strong></div>
+
   <div id="continue-container" style="display: none;">
-    <h2>Správně!</h2>
-    <a href="geo:0,0?q=https://mapy.cz/s/banevazete" target="_blank">Pokračuj dále:</a>
+    <h2>Děkujeme!</h2>
+    <a href="https://mapy.cz/s/banevazete" target="_blank">Pokračuj dále:</a>
   </div>
 
   <script>
+    const buttons = ['btnA', 'btnB', 'btnC', 'btnD'];
+
+    function checkCooldown() {
+      const lockTime = localStorage.getItem('wrongAnswerUntil');
+      const now = Date.now();
+      if (lockTime && now < parseInt(lockTime)) {
+        showWaitMessage();
+        return true;
+      }
+      return false;
+    }
+
+    function disableButtons(state) {
+      buttons.forEach(id => {
+        document.getElementById(id).disabled = state;
+      });
+    }
+
+    function showWaitMessage() {
+      document.getElementById("question-buttons").style.display = "none";
+      document.getElementById("waiting-message").style.display = "block";
+    }
+
     function checkAnswer(choice) {
-      if (choice === 'c') {
+      if (checkCooldown()) return;
+
+      if (choice === 'a') {
         document.getElementById("continue-container").style.display = "block";
+        document.getElementById("question-buttons").style.display = "none";
       } else {
-        alert("Špatná odpověď, zkus to znovu.");
+        const waitUntil = Date.now() + 5 * 60 * 1000;
+        localStorage.setItem('wrongAnswerUntil', waitUntil);
+        showWaitMessage();
+      }
+    }
+
+    // Kontrola po načtení
+    window.onload = function () {
+      if (checkCooldown()) {
+        disableButtons(true);
       }
     }
   </script>
