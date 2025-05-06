@@ -2,14 +2,13 @@
 <html lang="cs">
 <head>
     <script>
-  const params = new URLSearchParams(window.location.search);
-  const key = params.get("klic");
-
-  if (key !== "abc123") {
-    alert("Nepovolený přístup.");
-    window.location.href = "https://seznam.cz"; // nebo prázdná stránka
+  var heslo = prompt("Zadej heslo pro vstup:");
+  if (heslo !== "casper") {
+    alert("Špatné heslo. Přístup zamítnut.");
+    window.location.href = "https://seznam.cz"; // nebo můžeš dát prázdnou stránku
   }
 </script>
+
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
