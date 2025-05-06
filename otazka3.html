@@ -8,17 +8,43 @@
     body {
       font-family: sans-serif;
       padding: 20px;
+      background-color: #f9f9f9;
       text-align: center;
     }
+    h2 {
+      margin-bottom: 20px;
+    }
     button {
-      margin: 10px;
+      display: block;
+      width: 100%;
+      max-width: 300px;
+      margin: 10px auto;
+      padding: 15px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      background-color: #4CAF50;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    #continue-container {
+      margin-top: 30px;
+    }
+    #continue-container a {
+      display: inline-block;
+      margin-top: 10px;
       padding: 12px 20px;
+      background-color: #2196F3;
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
       font-size: 16px;
     }
-    #countdown-text {
-      font-size: 20px;
-      margin-top: 20px;
-      color: red;
+    #continue-container a:hover {
+      background-color: #0b7dda;
     }
   </style>
 </head>
@@ -65,7 +91,7 @@
       document.getElementById("question-section").style.display = "none";
       document.getElementById("wrong-answer").style.display = "block";
 
-      let seconds = 300; // 5 minut
+      let seconds = 30; // 5 minut
       const countdownText = document.getElementById("countdown-text");
 
       const interval = setInterval(() => {
