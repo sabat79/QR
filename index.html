@@ -4,6 +4,48 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>QR Hra</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f4f4f4;
+    }
+    #question-container, #continue-container {
+      text-align: center;
+      padding: 20px;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 400px;
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    a {
+      color: #007BFF;
+      text-decoration: none;
+      font-size: 16px;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
 </head>
 <body>
 
@@ -19,7 +61,7 @@
     <h2>Jakou destinaci bys ráda navštívila?</h2>
     <form id="question-form" action="https://formspree.io/f/xldbbzew" method="POST">
       <input type="hidden" name="_subject" value="Odpověď na otázku" /> <!-- Předmět e-mailu -->
-      
+
       <label>
         <input type="radio" name="answer" value="Itálie"> Itálie
       </label><br>
@@ -33,7 +75,6 @@
         <input type="radio" name="answer" value="Francie"> Francie
       </label><br><br>
       
-      <input type="email" name="email" placeholder="Váš e-mail" required><br><br>
       <button type="submit">Odeslat odpověď</button>
     </form>
   </div>
