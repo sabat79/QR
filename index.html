@@ -33,6 +33,8 @@
       border-radius: 4px;
       cursor: pointer;
       margin-top: 20px;
+      width: 100%;
+      margin-bottom: 10px;
     }
     button:hover {
       background-color: #45a049;
@@ -64,20 +66,12 @@
       <input type="hidden" name="_replyto" value="sabat.pavel@seznam.cz">
       <input type="hidden" name="_subject" value="Odpověď na otázku">
 
-      <label>
-        <input type="radio" name="answer" value="Itálie"> Itálie
-      </label><br>
-      <label>
-        <input type="radio" name="answer" value="Španělsko"> Španělsko
-      </label><br>
-      <label>
-        <input type="radio" name="answer" value="Rakousko"> Rakousko
-      </label><br>
-      <label>
-        <input type="radio" name="answer" value="Francie"> Francie
-      </label><br><br>
-      
-      <button type="submit">Odeslat odpověď</button>
+      <button type="button" onclick="setAnswer('Itálie')">Itálie</button>
+      <button type="button" onclick="setAnswer('Španělsko')">Španělsko</button>
+      <button type="button" onclick="setAnswer('Rakousko')">Rakousko</button>
+      <button type="button" onclick="setAnswer('Francie')">Francie</button><br><br>
+
+      <button type="submit" style="display: none;" id="submit-btn">Odeslat odpověď</button>
     </form>
   </div>
 
@@ -87,6 +81,13 @@
   </div>
 
   <script>
+    var selectedAnswer = null;
+
+    function setAnswer(answer) {
+      selectedAnswer = answer;
+      document.getElementById("submit-btn").style.display = "block";
+    }
+
     // Zobrazit otázku po správném heslu
     document.getElementById("question-container").style.display = "block";
 
@@ -94,10 +95,24 @@
     document.getElementById("question-form").onsubmit = function(event) {
       event.preventDefault();  // Zabránit standardnímu odeslání formuláře
 
-      var selectedAnswer = document.querySelector('input[name="answer"]:checked');
       if (selectedAnswer) {
-        document.getElementById("question-container").style.display = "none";
-        document.getElementById("continue-container").style.display = "block";
+        // Odeslání odpovědi
+        var formData = new FormData();
+        formData.append('answer', selectedAnswer);
+
+        fetch('https://formspree.io/f/xldbbzew', {
+          method: 'POST',
+          body: formData
+        }).then(response => {
+          if (response.ok) {
+            document.getElementById("question-container").style.display = "none";
+            document.getElementById("continue-container").style.display = "block";
+          } else {
+            alert("Došlo k chybě při odesílání odpovědi.");
+          }
+        }).catch(error => {
+          alert("Chyba při odesílání odpovědi.");
+        });
       } else {
         alert("Nejprve vyberte odpověď.");
       }
