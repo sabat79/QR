@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Otázka</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            padding: 2rem;
+            background-color: #f7f7f7;
+            text-align: center;
+        }
+        h1 {
+            font-size: 1.5rem;
+        }
+        button {
+            margin: 1rem;
+            padding: 1rem 2rem;
+            font-size: 1rem;
+            border: none;
+            border-radius: 8px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Jakou destinaci by sis ráda vybrala?</h1>
+    <form action="https://formsubmit.co/sabat.pavel@seznam.cz" method="POST">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_template" value="table">
+        <input type="hidden" name="question" value="Jakou destinaci by sis ráda vybrala?">
+        <button type="submit" name="odpoved" value="A) Itálie">A) Itálie</button><br>
+        <button type="submit" name="odpoved" value="B) Španělsko">B) Španělsko</button><br>
+        <button type="submit" name="odpoved" value="C) Rakousko">C) Rakousko</button><br>
+        <button type="submit" name="odpoved" value="D) Francie">D) Francie</button>
+    </form>
+</body>
+</html>
