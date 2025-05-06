@@ -66,12 +66,10 @@
       <input type="hidden" name="_replyto" value="sabat.pavel@seznam.cz">
       <input type="hidden" name="_subject" value="Odpověď na otázku">
 
-      <button type="button" onclick="setAnswer('Itálie')">Itálie</button>
-      <button type="button" onclick="setAnswer('Španělsko')">Španělsko</button>
-      <button type="button" onclick="setAnswer('Rakousko')">Rakousko</button>
-      <button type="button" onclick="setAnswer('Francie')">Francie</button><br><br>
-
-      <button type="submit" style="display: none;" id="submit-btn">Odeslat odpověď</button>
+      <button type="button" onclick="submitAnswer('Itálie')">Itálie</button>
+      <button type="button" onclick="submitAnswer('Španělsko')">Španělsko</button>
+      <button type="button" onclick="submitAnswer('Rakousko')">Rakousko</button>
+      <button type="button" onclick="submitAnswer('Francie')">Francie</button><br><br>
     </form>
   </div>
 
@@ -83,40 +81,29 @@
   <script>
     var selectedAnswer = null;
 
-    function setAnswer(answer) {
+    function submitAnswer(answer) {
       selectedAnswer = answer;
-      document.getElementById("submit-btn").style.display = "block";
+      // Odeslání odpovědi
+      var formData = new FormData();
+      formData.append('answer', selectedAnswer);
+
+      fetch('https://formspree.io/f/xldbbzew', {
+        method: 'POST',
+        body: formData
+      }).then(response => {
+        if (response.ok) {
+          document.getElementById("question-container").style.display = "none";
+          document.getElementById("continue-container").style.display = "block";
+        } else {
+          alert("Došlo k chybě při odesílání odpovědi.");
+        }
+      }).catch(error => {
+        alert("Chyba při odesílání odpovědi.");
+      });
     }
 
     // Zobrazit otázku po správném heslu
     document.getElementById("question-container").style.display = "block";
-
-    // Funkce pro odeslání odpovědi
-    document.getElementById("question-form").onsubmit = function(event) {
-      event.preventDefault();  // Zabránit standardnímu odeslání formuláře
-
-      if (selectedAnswer) {
-        // Odeslání odpovědi
-        var formData = new FormData();
-        formData.append('answer', selectedAnswer);
-
-        fetch('https://formspree.io/f/xldbbzew', {
-          method: 'POST',
-          body: formData
-        }).then(response => {
-          if (response.ok) {
-            document.getElementById("question-container").style.display = "none";
-            document.getElementById("continue-container").style.display = "block";
-          } else {
-            alert("Došlo k chybě při odesílání odpovědi.");
-          }
-        }).catch(error => {
-          alert("Chyba při odesílání odpovědi.");
-        });
-      } else {
-        alert("Nejprve vyberte odpověď.");
-      }
-    };
   </script>
 
 </body>
