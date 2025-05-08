@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>QR Hra – Otázka 6</title>
+  <title>QR Hra – Otázka</title>
   <style>
     body {
       font-family: sans-serif;
@@ -49,18 +49,7 @@
   </style>
 </head>
 <body>
-<script>
-  // Heslo na začátku stránky (nebude se znovu ptát při refreshi)
-  if (!localStorage.getItem("access_granted")) {
-    var heslo = prompt("Zadej heslo pro vstup:");
-    if (heslo !== "casper") {
-      alert("Špatné heslo. Přístup zamítnut.");
-      window.location.href = "https://seznam.cz";
-    } else {
-      localStorage.setItem("access_granted", "true");
-    }
-  }
-  
+
 <div id="question-container">
   <h2>Jaká planeta je nejblíž ke Slunci?</h2>
   <button onclick="wrongAnswer()">Merkur</button>
