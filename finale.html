@@ -24,6 +24,7 @@
       cursor: pointer;
       z-index: 10;
       position: relative;
+      display: none;
     }
     #start-button:hover {
       background-color: #e91e63;
@@ -36,12 +37,13 @@
     }
     h1 {
       font-size: 48px;
-      color: #ffd700;
+      color: #ff4081;
     }
     p {
       font-size: 22px;
       max-width: 600px;
-      margin: 0 auto;
+      margin: 10px auto;
+      color: #ffffff;
     }
     canvas {
       position: fixed;
@@ -57,11 +59,11 @@
 <body>
 
 <!-- Tlačítko pro spuštění oslavy -->
-<button id="start-button" style="display:none;">🎉 Začít slavit 🎉</button>
+<button id="start-button">🎉 Začít slavit 🎉</button>
 
 <!-- Text po spuštění oslavy -->
-<div style="text-align: center; font-size: 1.2em; color: #ffffff;">
-  <h1 style="color: #ff4081;">🎉 Skvělé! 🎉</h1>
+<div id="celebration-text">
+  <h1>🎉 Skvělé! 🎉</h1>
   <p>Došla jsi do cíle.</p>
   <p>Použij klíč, který jsi nalezla během hry.</p>
   <p>U dřevěného ptáka, který létá v noci, hledej poklad.</p>
@@ -83,7 +85,7 @@
     document.getElementById("start-button").style.display = "inline-block";
   }
 
-  // Po kliknutí na "Spusť oslavu"
+  // Po kliknutí na "Začít slavit"
   document.getElementById("start-button").addEventListener("click", function () {
     this.style.display = "none";
     document.getElementById("celebration-text").style.display = "block";
