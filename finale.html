@@ -7,20 +7,12 @@
   <style>
     body {
       margin: 0;
-      font-family: 'Comic Sans MS', cursive, sans-serif;
+      font-family: 'Segoe UI', sans-serif;
       text-align: center;
       overflow: hidden;
-      background: linear-gradient(270deg, #ff9a9e, #fad0c4, #fbc2eb, #a1c4fd, #c2e9fb, #fccb90);
-      background-size: 1200% 1200%;
-      animation: rainbow 20s ease infinite;
+      background-color: #1a1a1a;
       color: #ffffff;
       display: none;
-    }
-
-    @keyframes rainbow {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
     }
 
     h1 {
@@ -35,7 +27,6 @@
       margin-top: 20px;
       animation: fadeIn 3s ease-in-out;
       text-shadow: 1px 1px 2px #000;
-      color: white;
     }
 
     @keyframes fadeIn {
@@ -59,7 +50,6 @@
   <p>U dřevěného ptáka, který létá v noci, hledej poklad.</p>
 
   <canvas id="fireworks"></canvas>
-  <audio id="celebrationSound" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
 
   <script>
     // Heslo na začátku
@@ -102,7 +92,7 @@
     }
 
     function animate() {
-      ctx.fillStyle = "rgba(0, 0, 0, 0.2)";
+      ctx.fillStyle = "rgba(26, 26, 26, 0.2)";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       fireworks.forEach((f, i) => {
@@ -128,9 +118,6 @@
     function startCelebration() {
       setInterval(createFirework, 800);
       animate();
-      document.getElementById('celebrationSound').play().catch(e => {
-        console.log("Zvuk se nepodařilo přehrát automaticky:", e);
-      });
     }
 
     window.addEventListener('resize', () => {
