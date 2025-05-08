@@ -30,9 +30,6 @@
     button:hover {
       background-color: #45a049;
     }
-    #continue-container {
-      margin-top: 30px;
-    }
     #continue-container a {
       display: inline-block;
       margin-top: 10px;
@@ -47,17 +44,15 @@
       background-color: #0b7dda;
     }
     #cooldown-message {
-      color: red;
+      font-size: 18px;
       font-weight: bold;
       margin-top: 20px;
-      font-size: 18px;
     }
   </style>
 </head>
 <body>
 
 <script>
-  // Heslo na začátku stránky
   if (!localStorage.getItem("access_granted")) {
     var heslo = prompt("Zadej heslo pro vstup:");
     if (heslo !== "casper") {
@@ -68,7 +63,6 @@
     }
   }
 
-  // Penalizace
   function startCooldown() {
     const cooldownTime = 30 * 1000;
     const unlockTime = Date.now() + cooldownTime;
@@ -88,11 +82,18 @@
       if (diff <= 0) {
         clearInterval(interval);
         localStorage.removeItem("cooldown_until");
+        const failed = localStorage.getItem("question_failed") === "true";
         question.style.display = "none";
-        container.innerHTML = `
-          <p style="color: black;">Zdá se, že tato otázka je pro tebe poněkud složitá,<br>
-          proto dále pokračuj na souřadnice.</p>
-        `;
+        if (failed) {
+          container.innerHTML = `
+            <p style="color: black;">Zdá se, že tato otázka je pro tebe poněkud složitá,<br>
+            proto dále pokračuj na souřadnice.</p>
+            <a href="geo:0,0?q=https://mapy.cz/s/banevazete" target="_blank">
+              Pokračuj dále
+            </a>
+          `;
+          container.style.display = "block";
+        }
       } else {
         const minutes = Math.floor(diff / 60000);
         const seconds = Math.floor((diff % 60000) / 1000);
@@ -100,7 +101,7 @@
           <div style="color: red;">
             <p><strong>Špatná odpověď!</strong></p>
             <p>Počkej <b>${minutes}:${seconds.toString().padStart(2, '0')}</b></p>
-            <p><span style="color: black;">Zatím najdi předmět začínající na <b>"P"</b>.</span></p>
+            <p><span style="color: black;">Zatím najdi schránku s klíčem. Jdi cca 20 metrů pod velký kámen.</span></p>
           </div>
         `;
         question.style.display = "none";
@@ -111,16 +112,19 @@
 
   window.onload = function() {
     const cooldownUntil = parseInt(localStorage.getItem("cooldown_until") || "0");
-    const failed = localStorage.getItem("question_failed");
-
-    if (failed && Date.now() >= cooldownUntil) {
+    const failed = localStorage.getItem("question_failed") === "true";
+    if (Date.now() < cooldownUntil) {
+      showCooldown();
+    } else if (failed) {
+      document.getElementById("question-container").style.display = "none";
       document.getElementById("cooldown-message").innerHTML = `
         <p style="color: black;">Zdá se, že tato otázka je pro tebe poněkud složitá,<br>
         proto dále pokračuj na souřadnice.</p>
+        <a href="geo:0,0?q=https://mapy.cz/s/banevazete" target="_blank">
+          Pokračuj dále
+        </a>
       `;
       document.getElementById("cooldown-message").style.display = "block";
-    } else if (Date.now() < cooldownUntil) {
-      showCooldown();
     } else {
       document.getElementById("question-container").style.display = "block";
     }
@@ -129,22 +133,17 @@
 
 <div id="question-container" style="display: none;">
   <h2>Jaká planeta je nejblíže ke Slunci?</h2>
-  <button onclick="checkAnswer('a')">a) Jupiter</button>
-  <button onclick="checkAnswer('b')">b) Saturn</button>
-  <button onclick="checkAnswer('c')">c) Země</button>
-  <button onclick="checkAnswer('d')">d) Uran</button>
-</div>
-
-<div id="continue-container" style="display: none;">
-  <h2>Správně!</h2>
-  <a href="geo:0,0?q=https://mapy.cz/s/banevazete" target="_blank">Pokračuj dále:</a>
+  <button onclick="checkAnswer('a')">a) Mars</button>
+  <button onclick="checkAnswer('b')">b) Země</button>
+  <button onclick="checkAnswer('c')">c) Jupiter</button>
+  <button onclick="checkAnswer('d')">d) Saturn</button>
 </div>
 
 <div id="cooldown-message" style="display: none;"></div>
 
 <script>
   function checkAnswer(answer) {
-    // Žádná odpověď není správná
+    // všechny odpovědi jsou špatně
     startCooldown();
   }
 </script>
