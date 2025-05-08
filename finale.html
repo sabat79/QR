@@ -4,75 +4,101 @@
   <meta charset="UTF-8">
   <title>-Finále hry-</title>
   <style>
-    body {
-      margin: 0;
-      padding: 0;
-      background-color: #111;
-      color: white;
-      font-family: sans-serif;
-      text-align: center;
-      overflow: hidden;
-    }
+  body {
+    margin: 0;
+    padding: 0;
+    background-color: #111;
+    color: white;
+    font-family: sans-serif;
+    text-align: center;
+    overflow: hidden;
+  }
+
+  #start-button {
+    margin-top: 200px;
+    padding: 20px 40px;
+    font-size: 24px;
+    background-color: #ff4081;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    z-index: 10;
+    position: relative;
+  }
+
+  #start-button:hover {
+    background-color: #e91e63;
+  }
+
+  #celebration-text {
+    display: none;
+    margin-top: 100px;
+    z-index: 10;
+    position: relative;
+  }
+
+  h1 {
+    font-size: 48px;
+    color: #ff4081;
+  }
+
+  p {
+    font-size: 22px;
+    max-width: 600px;
+    margin: 15px auto;
+  }
+
+  canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* --- Úpravy pro mobilní zařízení --- */
+  @media (max-width: 768px) {
     #start-button {
-      margin-top: 200px;
-      padding: 20px 40px;
-      font-size: 24px;
-      background-color: #ff4081;
-      color: white;
-      border: none;
-      border-radius: 12px;
-      cursor: pointer;
-      z-index: 10;
-      position: relative;
-    }
-    #start-button:hover {
-      background-color: #e91e63;
-    }
-    #celebration-text {
-      display: none;
-      margin-top: 100px;
-      z-index: 10;
-      position: relative;
-    }
-    h1 {
-      font-size: 48px;
-      color: #ff4081;
-    }
-    p {
-      font-size: 22px;
-      max-width: 600px;
-      margin: 15px auto;
-    }
-    canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 1;
+      margin-top: 150px;
+      padding: 30px 60px;
+      font-size: 36px;
     }
 
-    /* Úpravy pro mobilní zařízení */
-    @media (max-width: 600px) {
-      #start-button {
-        padding: 30px 60px;
-        font-size: 32px;
-      }
-      h1 {
-        font-size: 36px;
-      }
-      p {
-        font-size: 20px;
-        padding: 0 15px;
-      }
+    h1 {
+      font-size: 42px;
     }
-  </style>
+
+    p {
+      font-size: 26px;
+      padding: 0 20px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    #start-button {
+      margin-top: 120px;
+      padding: 40px 70px;
+      font-size: 40px;
+    }
+
+    h1 {
+      font-size: 38px;
+    }
+
+    p {
+      font-size: 24px;
+    }
+  }
+</style>
+
 </head>
 <body>
 
 <!-- Tlačítko pro spuštění oslavy -->
-<button id="start-button" style="display:none;">🎉 Začít_slavit 🎉</button>
+<button id="start-button" style="display:none;">🎉 Začít slavit 🎉</button>
 
 <!-- Text po spuštění oslavy -->
 <div id="celebration-text">
