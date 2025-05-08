@@ -1,32 +1,31 @@
 <!DOCTYPE html>
 <html lang="cs">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Gratulace!</title>
   <style>
     body {
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
+      background-color: #1a1a1a;
+      color: white;
       text-align: center;
       overflow: hidden;
-      background-color: #1a1a1a;
-      color: #ffffff;
       display: none;
     }
 
     h1 {
       margin-top: 100px;
-      font-size: 3.5em;
-      animation: fadeIn 2s ease-in-out;
+      font-size: 3em;
       color: #FFD700;
+      animation: fadeIn 2s ease-in-out;
     }
 
     p {
-      font-size: 1.8em;
+      font-size: 1.5em;
       margin-top: 20px;
       animation: fadeIn 3s ease-in-out;
-      text-shadow: 1px 1px 2px #000;
     }
 
     @keyframes fadeIn {
@@ -43,7 +42,6 @@
   </style>
 </head>
 <body>
-
   <h1>🎉 Skvělé! 🎉</h1>
   <p>Došla jsi do cíle.</p>
   <p>Použij klíč, který jsi nalezla během hry.</p>
@@ -52,79 +50,75 @@
   <canvas id="fireworks"></canvas>
 
   <script>
-    // Heslo na začátku
-    var heslo = prompt("Zadej heslo pro vstup:");
-    if (heslo !== "casper") {
+    const password = prompt("Zadej heslo pro vstup:");
+    if (password !== "casper") {
       alert("Špatné heslo. Přístup zamítnut.");
       window.location.href = "https://seznam.cz";
     } else {
       document.body.style.display = "block";
-      startCelebration();
+      launchFireworks();
     }
 
-    const canvas = document.getElementById('fireworks');
-    const ctx = canvas.getContext('2d');
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    let fireworks = [];
+    function launchFireworks() {
+      const canvas = document.getElementById("fireworks");
+      const ctx = canvas.getContext("2d");
+      let fireworks = [];
 
-    function random(min, max) {
-      return Math.random() * (max - min) + min;
-    }
-
-    function createFirework() {
-      const x = random(100, canvas.width - 100);
-      const y = random(50, canvas.height / 2);
-      const count = random(20, 40);
-      const color = `hsl(${Math.floor(random(0, 360))}, 100%, 60%)`;
-
-      for (let i = 0; i < count; i++) {
-        const angle = (Math.PI * 2 * i) / count;
-        const speed = random(2, 5);
-        fireworks.push({
-          x, y,
-          vx: Math.cos(angle) * speed,
-          vy: Math.sin(angle) * speed,
-          alpha: 1,
-          color
-        });
-      }
-    }
-
-    function animate() {
-      ctx.fillStyle = "rgba(26, 26, 26, 0.2)";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      fireworks.forEach((f, i) => {
-        f.x += f.vx;
-        f.y += f.vy;
-        f.alpha -= 0.015;
-
-        if (f.alpha <= 0) {
-          fireworks.splice(i, 1);
-        }
-
-        ctx.globalAlpha = f.alpha;
-        ctx.fillStyle = f.color;
-        ctx.beginPath();
-        ctx.arc(f.x, f.y, 3, 0, Math.PI * 2);
-        ctx.fill();
-      });
-
-      ctx.globalAlpha = 1;
-      requestAnimationFrame(animate);
-    }
-
-    function startCelebration() {
-      setInterval(createFirework, 800);
-      animate();
-    }
-
-    window.addEventListener('resize', () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
-    });
-  </script>
 
+      function random(min, max) {
+        return Math.random() * (max - min) + min;
+      }
+
+      function createFirework() {
+        const x = random(100, canvas.width - 100);
+        const y = random(50, canvas.height / 2);
+        const count = random(30, 50);
+        const color = `hsl(${Math.floor(random(0, 360))}, 100%, 60%)`;
+
+        for (let i = 0; i < count; i++) {
+          const angle = (Math.PI * 2 * i) / count;
+          const speed = random(2, 5);
+          fireworks.push({
+            x, y,
+            vx: Math.cos(angle) * speed,
+            vy: Math.sin(angle) * speed,
+            alpha: 1,
+            color
+          });
+        }
+      }
+
+      function animate() {
+        ctx.fillStyle = "rgba(26, 26, 26, 0.2)";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        fireworks = fireworks.filter(f => f.alpha > 0);
+        fireworks.forEach(f => {
+          f.x += f.vx;
+          f.y += f.vy;
+          f.alpha -= 0.015;
+
+          ctx.globalAlpha = f.alpha;
+          ctx.fillStyle = f.color;
+          ctx.beginPath();
+          ctx.arc(f.x, f.y, 3, 0, Math.PI * 2);
+          ctx.fill();
+        });
+
+        ctx.globalAlpha = 1;
+        requestAnimationFrame(animate);
+      }
+
+      setInterval(createFirework, 800);
+      animate();
+
+      window.addEventListener('resize', () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      });
+    }
+  </script>
 </body>
 </html>
