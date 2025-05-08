@@ -48,7 +48,7 @@
       font-weight: bold;
       margin-top: 20px;
     }
-  </style>
+	</style>
 </head>
 <body>
 
@@ -88,9 +88,10 @@
           container.innerHTML = `
             <p style="color: black;">Zdá se, že tato otázka je pro tebe poněkud složitá,<br>
             proto dále pokračuj na souřadnice.</p>
-            <a href="geo:0,0?q=https://mapy.cz/s/banevazete" target="_blank">
-              Pokračuj dále
-            </a>
+            <a href="geo:0,0?q=https://mapy.cz/s/banevazete" target="_blank" class="continue-button">
+  Pokračuj dále
+</a>
+
           `;
           container.style.display = "block";
         }
@@ -101,7 +102,7 @@
           <div style="color: red;">
             <p><strong>Špatná odpověď!</strong></p>
             <p>Počkej <b>${minutes}:${seconds.toString().padStart(2, '0')}</b></p>
-            <p><span style="color: black;">Zatím najdi schránku s klíčem. Jdi cca 20 metrů pod velký kámen.</span></p>
+            <p><span style="color: black;">Zatím jdi cca 20 metrů severně, pod velkým kamenen najdi schránku, obsah pečlivě uschovej!</span></p>
           </div>
         `;
         question.style.display = "none";
@@ -120,9 +121,10 @@
       document.getElementById("cooldown-message").innerHTML = `
         <p style="color: black;">Zdá se, že tato otázka je pro tebe poněkud složitá,<br>
         proto dále pokračuj na souřadnice.</p>
-        <a href="geo:0,0?q=https://mapy.cz/s/banevazete" target="_blank">
-          Pokračuj dále
-        </a>
+        <a href="geo:0,0?q=https://mapy.cz/s/banevazete" target="_blank" class="continue-button">
+  Pokračuj dále
+</a>
+
       `;
       document.getElementById("cooldown-message").style.display = "block";
     } else {
