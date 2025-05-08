@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>QR Hra – Otázka</title>
+  <title>QR Hra – Otázka 6</title>
   <style>
     body {
       font-family: sans-serif;
@@ -49,6 +49,20 @@
   </style>
 </head>
 <body>
+
+<script>
+  // Heslo na začátku stránky (nebude se znovu ptát při refreshi)
+  if (!localStorage.getItem("access_granted")) {
+    var heslo = prompt("Zadej heslo pro vstup:");
+    if (heslo !== "casper") {
+      alert("Špatné heslo. Přístup zamítnut.");
+      window.location.href = "https://seznam.cz";
+    } else {
+      localStorage.setItem("access_granted", "true");
+    }
+  }
+</script>
+
 
 <div id="question-container">
   <h2>Jaká planeta je nejblíž ke Slunci?</h2>
@@ -110,13 +124,15 @@
     }, 1000);
   }
 
-  // Zkontroluj při načtení, zda platí cooldown
-  window.onload = function () {
-    const unlock = parseInt(localStorage.getItem("cooldown_until") || "0");
-    if (Date.now() < unlock) {
-      showCooldown();
-    }
-  };
+  window.onload = function() {
+  const cooldownUntil = parseInt(localStorage.getItem("cooldown_until") || "0");
+  if (Date.now() < cooldownUntil) {
+    showCooldown(); // stále běží penalizace
+  } else {
+    document.getElementById("question-container").style.display = "block"; // zobraz otázky
+  }
+};
+
 </script>
 
 </body>
