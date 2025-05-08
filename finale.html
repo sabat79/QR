@@ -24,7 +24,6 @@
       cursor: pointer;
       z-index: 10;
       position: relative;
-      display: none;
     }
     #start-button:hover {
       background-color: #e91e63;
@@ -42,8 +41,7 @@
     p {
       font-size: 22px;
       max-width: 600px;
-      margin: 10px auto;
-      color: #ffffff;
+      margin: 15px auto;
     }
     canvas {
       position: fixed;
@@ -59,7 +57,7 @@
 <body>
 
 <!-- Tlačítko pro spuštění oslavy -->
-<button id="start-button">🎉 Začít slavit 🎉</button>
+<button id="start-button" style="display:none;">🎉 Začít slavit 🎉</button>
 
 <!-- Text po spuštění oslavy -->
 <div id="celebration-text">
@@ -72,8 +70,8 @@
 <!-- Ohňostroj -->
 <canvas id="fireworks"></canvas>
 
-<!-- Zvuk -->
-<audio id="celebration-sound" src="https://www.soundjay.com/human/sounds/applause-8.mp3" preload="auto"></audio>
+<!-- Slavnostní zvuk (fanfára) -->
+<audio id="celebration-sound" src="https://www.soundjay.com/misc/sounds/fanfare-01.mp3" preload="auto" loop></audio>
 
 <script>
   // Kontrola hesla
