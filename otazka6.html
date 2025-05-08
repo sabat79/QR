@@ -78,7 +78,7 @@
   }
 
   function startCooldown() {
-    const cooldownTime = 30 * 1000;
+    const cooldownTime = 5 * 60 * 1000;
     const unlockTime = Date.now() + cooldownTime;
     localStorage.setItem("cooldown_until", unlockTime.toString());
     localStorage.setItem("question_failed", "true");
