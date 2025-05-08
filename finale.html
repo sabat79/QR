@@ -14,6 +14,7 @@
       background-size: 1200% 1200%;
       animation: rainbow 20s ease infinite;
       color: #ffffff;
+      display: none;
     }
 
     @keyframes rainbow {
@@ -26,7 +27,7 @@
       margin-top: 100px;
       font-size: 3.5em;
       animation: fadeIn 2s ease-in-out;
-      color: #FFD700; /* Zlatá barva pro "Skvělé!" */
+      color: #FFD700;
     }
 
     p {
@@ -58,8 +59,19 @@
   <p>U dřevěného ptáka, který létá v noci, hledej poklad.</p>
 
   <canvas id="fireworks"></canvas>
+  <audio id="celebrationSound" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
 
   <script>
+    // Heslo na začátku
+    var heslo = prompt("Zadej heslo pro vstup:");
+    if (heslo !== "casper") {
+      alert("Špatné heslo. Přístup zamítnut.");
+      window.location.href = "https://seznam.cz";
+    } else {
+      document.body.style.display = "block";
+      startCelebration();
+    }
+
     const canvas = document.getElementById('fireworks');
     const ctx = canvas.getContext('2d');
     canvas.width = window.innerWidth;
@@ -116,9 +128,11 @@
     function startCelebration() {
       setInterval(createFirework, 800);
       animate();
+      document.getElementById('celebrationSound').play().catch(e => {
+        console.log("Zvuk se nepodařilo přehrát automaticky:", e);
+      });
     }
 
-    window.addEventListener('load', startCelebration);
     window.addEventListener('resize', () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
