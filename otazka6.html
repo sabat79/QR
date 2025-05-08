@@ -86,8 +86,7 @@
         question.style.display = "none";
         if (failed) {
           container.innerHTML = `
-            <p style="color: black;">Zdá se, že tato otázka je pro tebe poněkud složitá,<br>
-            proto dále pokračuj na souřadnice.</p>
+            <p style="color: black;">Zdá se, že tato otázka je pro tebe poněkud složitá.</p>
             <a href="geo:0,0?q=https://mapy.cz/s/banevazete" target="_blank" class="continue-button">
   Pokračuj dále
 </a>
@@ -119,8 +118,7 @@
     } else if (failed) {
       document.getElementById("question-container").style.display = "none";
       document.getElementById("cooldown-message").innerHTML = `
-        <p style="color: black;">Zdá se, že tato otázka je pro tebe poněkud složitá,<br>
-        proto dále pokračuj na souřadnice.</p>
+        <p style="color: black;">Zdá se, že tato otázka je pro tebe poněkud složitá.</p>
         <a href="geo:0,0?q=https://mapy.cz/s/banevazete" target="_blank" class="continue-button">
   Pokračuj dále
 </a>
