@@ -2,7 +2,7 @@
 <html lang="cs">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>QR Hra – Otázka 6</title>
   <style>
     body {
@@ -46,12 +46,18 @@
     #continue-container a:hover {
       background-color: #0b7dda;
     }
+    #cooldown-message {
+      color: red;
+      font-weight: bold;
+      margin-top: 20px;
+      font-size: 18px;
+    }
   </style>
 </head>
 <body>
 
 <script>
-  // Heslo na začátku stránky (nebude se znovu ptát při refreshi)
+  // Heslo na začátku stránky
   if (!localStorage.getItem("access_granted")) {
     var heslo = prompt("Zadej heslo pro vstup:");
     if (heslo !== "casper") {
@@ -61,43 +67,19 @@
       localStorage.setItem("access_granted", "true");
     }
   }
-</script>
 
-
-<div id="question-container">
-  <h2>Jaká planeta je nejblíž ke Slunci?</h2>
-  <button onclick="wrongAnswer()">Merkur</button>
-  <button onclick="wrongAnswer()">Země</button>
-  <button onclick="wrongAnswer()">Mars</button>
-  <button onclick="wrongAnswer()">Jupiter</button>
-</div>
-
-<div id="cooldown-message" style="display: none;"></div>
-
-<div id="continue-container" style="display: none;">
-  <h2>Zdá se, že tato otázka je pro tebe poněkud těžká.</h2>
-  <p>Proto pokračuj dále:</p>
-  <a href="https://mapy.cz/s/banevazete" target="_blank">Otevřít místo v Mapy.cz</a>
-</div>
-
-<script>
-  const cooldownTime = 30 * 1000; // 30 sekund v milisekundách
-
-  function wrongAnswer() {
-    startCooldown();
-  }
-
+  // Penalizace
   function startCooldown() {
+    const cooldownTime = 30 * 1000;
     const unlockTime = Date.now() + cooldownTime;
     localStorage.setItem("cooldown_until", unlockTime.toString());
+    localStorage.setItem("question_failed", "true");
     showCooldown();
   }
 
   function showCooldown() {
     const container = document.getElementById("cooldown-message");
     const question = document.getElementById("question-container");
-    const continueBox = document.getElementById("continue-container");
-
     const interval = setInterval(() => {
       const now = Date.now();
       const unlock = parseInt(localStorage.getItem("cooldown_until") || "0");
@@ -106,8 +88,11 @@
       if (diff <= 0) {
         clearInterval(interval);
         localStorage.removeItem("cooldown_until");
-        container.style.display = "none";
-        continueBox.style.display = "block";
+        question.style.display = "none";
+        container.innerHTML = `
+          <p style="color: black;">Zdá se, že tato otázka je pro tebe poněkud složitá,<br>
+          proto dále pokračuj na souřadnice.</p>
+        `;
       } else {
         const minutes = Math.floor(diff / 60000);
         const seconds = Math.floor((diff % 60000) / 1000);
@@ -115,7 +100,7 @@
           <div style="color: red;">
             <p><strong>Špatná odpověď!</strong></p>
             <p>Počkej <b>${minutes}:${seconds.toString().padStart(2, '0')}</b></p>
-            <p style="color: black;">Zatím najdi schránku s klíčem. Jdi směrem na sever cca 20 m pod velkým kamenem.</p>
+            <p><span style="color: black;">Zatím najdi předmět začínající na <b>"P"</b>.</span></p>
           </div>
         `;
         question.style.display = "none";
@@ -125,14 +110,43 @@
   }
 
   window.onload = function() {
-  const cooldownUntil = parseInt(localStorage.getItem("cooldown_until") || "0");
-  if (Date.now() < cooldownUntil) {
-    showCooldown(); // stále běží penalizace
-  } else {
-    document.getElementById("question-container").style.display = "block"; // zobraz otázky
-  }
-};
+    const cooldownUntil = parseInt(localStorage.getItem("cooldown_until") || "0");
+    const failed = localStorage.getItem("question_failed");
 
+    if (failed && Date.now() >= cooldownUntil) {
+      document.getElementById("cooldown-message").innerHTML = `
+        <p style="color: black;">Zdá se, že tato otázka je pro tebe poněkud složitá,<br>
+        proto dále pokračuj na souřadnice.</p>
+      `;
+      document.getElementById("cooldown-message").style.display = "block";
+    } else if (Date.now() < cooldownUntil) {
+      showCooldown();
+    } else {
+      document.getElementById("question-container").style.display = "block";
+    }
+  };
+</script>
+
+<div id="question-container" style="display: none;">
+  <h2>Jaká planeta je nejblíže ke Slunci?</h2>
+  <button onclick="checkAnswer('a')">a) Jupiter</button>
+  <button onclick="checkAnswer('b')">b) Saturn</button>
+  <button onclick="checkAnswer('c')">c) Země</button>
+  <button onclick="checkAnswer('d')">d) Uran</button>
+</div>
+
+<div id="continue-container" style="display: none;">
+  <h2>Správně!</h2>
+  <a href="geo:0,0?q=https://mapy.cz/s/banevazete" target="_blank">Pokračuj dále:</a>
+</div>
+
+<div id="cooldown-message" style="display: none;"></div>
+
+<script>
+  function checkAnswer(answer) {
+    // Žádná odpověď není správná
+    startCooldown();
+  }
 </script>
 
 </body>
