@@ -26,22 +26,6 @@
       animation: fadeIn 3s ease-in-out;
     }
 
-    button {
-      margin-top: 40px;
-      padding: 15px 30px;
-      font-size: 18px;
-      background-color: #4CAF50;
-      border: none;
-      border-radius: 8px;
-      color: white;
-      cursor: pointer;
-      animation: fadeIn 4s ease-in-out;
-    }
-
-    button:hover {
-      background-color: #45a049;
-    }
-
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
@@ -59,13 +43,11 @@
 
   <h1>Skvělé!</h1>
   <p>Došla jsi do cíle.</p>
-  <p>Použij klíč, který jsi nalezla během hry,</p>
-  <p>u dřevěného ptáka, který létá v noci, hledej poklad.</p>
-
-  <button onclick="startCelebration()">🎉 Spustit oslavu</button>
+  <p>Použij klíč, který jsi nalezla během hry.</p>
+  <p>U dřevěného ptáka, který létá v noci, hledej poklad.</p>
 
   <canvas id="fireworks"></canvas>
-  <audio id="celebration-audio" src="https://www.soundjay.com/human/sounds/applause-8.mp3"></audio>
+  <audio id="celebration-audio" src="https://www.soundjay.com/human/sounds/applause-8.mp3" autoplay></audio>
 
   <script>
     const canvas = document.getElementById('fireworks');
@@ -73,7 +55,6 @@
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
     let fireworks = [];
-    let fireworkInterval;
 
     function random(min, max) {
       return Math.random() * (max - min) + min;
@@ -122,12 +103,21 @@
       requestAnimationFrame(animate);
     }
 
+    // Spustit oslavu ihned
     function startCelebration() {
-      document.getElementById('celebration-audio').play();
-      fireworkInterval = setInterval(createFirework, 800);
+      setInterval(createFirework, 800);
       animate();
+
+      const audio = document.getElementById('celebration-audio');
+      if (audio) {
+        // Zkusit přehrát (někdy selže kvůli autoplay pravidlům)
+        audio.play().catch((e) => {
+          console.warn("Zvuk nelze automaticky přehrát:", e);
+        });
+      }
     }
 
+    window.addEventListener('load', startCelebration);
     window.addEventListener('resize', () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
