@@ -5,94 +5,93 @@
   <title>-Finále hry-</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    body {
-      margin: 0;
-      padding: 0;
-      background-color: #111;
-      color: white;
-      font-family: sans-serif;
-      text-align: center;
-      overflow: hidden;
-    }
+  body {
+    margin: 0;
+    padding: 0;
+    background-color: #111;
+    color: white;
+    font-family: sans-serif;
+    text-align: center;
+    overflow: hidden;
+  }
 
+  #start-button {
+    margin-top: 200px;
+    padding: 24px 48px;
+    font-size: 28px;
+    background-color: #ff4081;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    z-index: 10;
+    position: relative;
+  }
+
+  #start-button:hover {
+    background-color: #e91e63;
+  }
+
+  #celebration-text {
+    display: none;
+    margin-top: 100px;
+    z-index: 10;
+    position: relative;
+  }
+
+  h1 {
+    font-size: 42px;
+    color: #ff4081;
+  }
+
+  p {
+    font-size: 22px;
+    max-width: 90%;
+    margin: 18px auto;
+  }
+
+  canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* Mírné zvětšení pro mobilní zařízení */
+  @media (max-width: 768px) {
     #start-button {
-      margin-top: 200px;
-      padding: 30px 60px;
-      font-size: 36px;
-      background-color: #ff4081;
-      color: white;
-      border: none;
-      border-radius: 12px;
-      cursor: pointer;
-      z-index: 10;
-      position: relative;
-    }
-
-    #start-button:hover {
-      background-color: #e91e63;
-    }
-
-    #celebration-text {
-      display: none;
-      margin-top: 100px;
-      z-index: 10;
-      position: relative;
+      padding: 28px 56px;
+      font-size: 32px;
     }
 
     h1 {
-      font-size: 50px;
-      color: #ff4081;
+      font-size: 46px;
+    }
+
+    p {
+      font-size: 26px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    #start-button {
+      padding: 30px 60px;
+      font-size: 34px;
+    }
+
+    h1 {
+      font-size: 48px;
     }
 
     p {
       font-size: 28px;
-      max-width: 90%;
-      margin: 20px auto;
     }
+  }
+</style>
 
-    canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 1;
-    }
-
-    /* --- ZVĚTŠENÍ PRO MOBIL --- */
-    @media (max-width: 768px) {
-      #start-button {
-        margin-top: 150px;
-        padding: 40px 80px;
-        font-size: 44px;
-      }
-
-      h1 {
-        font-size: 56px;
-      }
-
-      p {
-        font-size: 30px;
-      }
-    }
-
-    @media (max-width: 480px) {
-      #start-button {
-        margin-top: 120px;
-        padding: 50px 90px;
-        font-size: 48px;
-      }
-
-      h1 {
-        font-size: 52px;
-      }
-
-      p {
-        font-size: 32px;
-      }
-    }
-  </style>
 </head>
 <body>
 
