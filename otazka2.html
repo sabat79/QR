@@ -130,8 +130,13 @@
     <h2>Správně!</h2>
 	<h2>Získala jsi 1.kód: cerveny573</h2>
 	<h3>!!! Kód si zapamatuj !!!</h3>
-        <a href="https://mapy.cz/zakladni?source=coor&id=14.3150494%2C49.9456392&ds=1" target="_blank">Pokračuj dále:</a>
+        <button onclick="redirectToMap()">Pokračuj dále</button>
   </div>
+<script>
+  function redirectToMap() {
+    window.location.href = "geo:49.9456392,14.3150494?q=49.9456392,14.3150494(Mapa)";
+  }
+</script>
 
 <div id="cooldown-message" style="display: none;"></div>
 
