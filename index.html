@@ -70,9 +70,16 @@
 
   <div id="continue-container" style="display: none;">
     <h2>Skvělé!</h2>
-    <a href="https://mapy.cz/zakladni?source=coor&id=14.3150494%2C49.9456392&ds=1" target="_blank">Pokračuj dále:</a>
+    <a href="#" onclick="redirectToMap(); return false;">Pokračuj dále:</a>
   </div>
 
+<script>
+  function redirectToMap() {
+    window.location.href = "geo:49.9456392,14.3150494?q=49.9456392,14.3150494(Mapa)";
+  }
+</script>
+
+  
   <script>
     function submitAnswer(answer) {
       const formData = new FormData();
