@@ -130,8 +130,14 @@
     <h2>Správně!</h2>
 	<h2>Získala jsi 2.kód: fialovy030</h2>
 	<h3>!!! Kód si zapamatuj !!!</h3>
-    <a href="geo:0,0?q=https://mapy.com/s/lenegotoha" target="_blank">Pokračuj dále:</a>
-  </div>
+    <a href="#" onclick="redirectToMap(); return false;">Pokračuj dále:</a>
+</div>
+
+<script>
+  function redirectToMap() {
+    window.location.href = "geo:49.9456392,14.3150494?q=49.9456392,14.3150494(Mapa)";
+  }
+</script>
 
 <div id="cooldown-message" style="display: none;"></div>
 
