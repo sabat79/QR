@@ -124,18 +124,38 @@
     }, 1000);
   }
 
+  <script>
+  // Funkce pro přesměrování na geo URI
+  function redirectToMap() {
+    window.location.href = "geo:49.9456392,14.3150494?q=49.9456392,14.3150494(Mapa)";
+  }
+
   window.onload = function() {
     const cooldownUntil = parseInt(localStorage.getItem("cooldown_until") || "0");
     const failed = localStorage.getItem("question_failed") === "true";
+
     if (Date.now() < cooldownUntil) {
       showCooldown();
     } else if (failed) {
       document.getElementById("question-container").style.display = "none";
-      document.getElementById("cooldown-message").innerHTML = `
+
+      // Vložíme odkaz, který místo href volá funkci redirectToMap
+      const cooldownMsg = document.getElementById("cooldown-message");
+      cooldownMsg.innerHTML = `
         <p style="color: black;">Zdá se, že tato otázka je pro tebe poněkud složitá.</p>
-        <a href="geo:0,0?q=https://mapy.com/s/poretehezo" target="_blank" class="continue-button">
-  Pokračuj dále
-</a>
+        <a href="#" class="continue-button" id="continue-link">Pokračuj dále</a>
+      `;
+      cooldownMsg.style.display = "block";
+
+      // Přidáme onclick, který spustí redirectToMap
+      document.getElementById("continue-link").onclick = function(event) {
+        event.preventDefault();  // zabrání defaultnímu chování odkazu
+        redirectToMap();
+      };
+    }
+  };
+</script>
+
 
       `;
       document.getElementById("cooldown-message").style.display = "block";
