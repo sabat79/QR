@@ -23,7 +23,7 @@
       font-size: 16px;
       border: none;
       border-radius: 8px;
-      background-color: #4CAF50;
+      background-color: #4caf50;
       color: white;
       cursor: pointer;
     }
@@ -35,11 +35,12 @@
       display: inline-block;
       margin-top: 10px;
       padding: 12px 20px;
-      background-color: #2196F3;
+      background-color: #2196f3;
       color: white;
       text-decoration: none;
       border-radius: 6px;
       font-size: 16px;
+      cursor: pointer;
     }
     #continue-container a:hover,
     .continue-button:hover {
@@ -49,13 +50,14 @@
       font-size: 18px;
       font-weight: bold;
       margin-top: 20px;
+      display: none;
     }
   </style>
 </head>
 <body>
 
 <script>
-  // Kontrola hesla na začátku
+  // Kontrola hesla pro přístup
   if (!localStorage.getItem("access_granted")) {
     var heslo = prompt("Zadej heslo pro vstup:");
     if (heslo !== "casper") {
@@ -66,19 +68,21 @@
     }
   }
 
-  // Funkce pro start cooldown
+  // Spustí cooldown (časový blok po špatné odpovědi)
   function startCooldown() {
-    const cooldownTime = 5 * 60 * 1000; // 5 minut
+    const cooldownTime = 5 * 60 * 1000; // 5 minut v ms
     const unlockTime = Date.now() + cooldownTime;
     localStorage.setItem("cooldown_until", unlockTime.toString());
     localStorage.setItem("question_failed", "true");
     showCooldown();
   }
 
-  // Zobrazování cooldownu
+  // Zobrazí odpočet cooldownu
   function showCooldown() {
     const container = document.getElementById("cooldown-message");
     const question = document.getElementById("question-container");
+    question.style.display = "none";
+    container.style.display = "block";
 
     const interval = setInterval(() => {
       const now = Date.now();
@@ -88,23 +92,18 @@
       if (diff <= 0) {
         clearInterval(interval);
         localStorage.removeItem("cooldown_until");
-        const failed = localStorage.getItem("question_failed") === "true";
 
-        question.style.display = "none";
+        container.innerHTML = `
+          <p style="color: black;">Zdá se, že tato otázka je pro tebe poněkud složitá.</p>
+          <a href="#" class="continue-button" id="continue-link">Pokračuj dále</a>
+        `;
 
-        if (failed) {
-          container.innerHTML = `
-            <p style="color: black;">Zdá se, že tato otázka je pro tebe poněkud složitá.</p>
-            <a href="#" class="continue-button" id="continue-link">Pokračuj dále</a>
-          `;
-          container.style.display = "block";
+        // Po kliknutí přesměruj na mapu
+        document.getElementById("continue-link").onclick = function(event) {
+          event.preventDefault();
+          redirectToMap();
+        };
 
-          // Přidáme event listener na odkaz, který spustí redirectToMap
-          document.getElementById("continue-link").onclick = function(event) {
-            event.preventDefault();
-            redirectToMap();
-          };
-        }
       } else {
         const minutes = Math.floor(diff / 60000);
         const seconds = Math.floor((diff % 60000) / 1000);
@@ -115,13 +114,11 @@
             <p><span style="color: black;">Zatím jdi cca 10 metrů severně, pod velkým kamenem najdi schránku, obsah pečlivě uschovej!</span></p>
           </div>
         `;
-        question.style.display = "none";
-        container.style.display = "block";
       }
     }, 1000);
   }
 
-  // Přesměrování do map
+  // Přesměrování na geo URI (jen pro Android)
   function redirectToMap() {
     window.location.href = "geo:49.9456392,14.3150494?q=49.9456392,14.3150494(Mapa)";
   }
@@ -134,10 +131,10 @@
     if (Date.now() < cooldownUntil) {
       showCooldown();
     } else if (failed) {
-      // Pokud je otázka označena jako nevyřešená, zobraz odkaz k pokračování
-      const container = document.getElementById("cooldown-message");
+      // Pokud už selhal, rovnou nabídni pokračování
       document.getElementById("question-container").style.display = "none";
 
+      const container = document.getElementById("cooldown-message");
       container.innerHTML = `
         <p style="color: black;">Zdá se, že tato otázka je pro tebe poněkud složitá.</p>
         <a href="#" class="continue-button" id="continue-link">Pokračuj dále</a>
@@ -149,13 +146,12 @@
         redirectToMap();
       };
     } else {
-      // Zobraz otázku pokud není cooldown ani chyba
       document.getElementById("question-container").style.display = "block";
       document.getElementById("cooldown-message").style.display = "none";
     }
   };
 
-  // Kontrola odpovědi - tady jsou všechny odpovědi špatné
+  // Kontrola odpovědi – všechny odpovědi jsou špatně
   function checkAnswer(answer) {
     startCooldown();
   }
@@ -169,7 +165,7 @@
   <button onclick="checkAnswer('d')">d) Saturn</button>
 </div>
 
-<div id="cooldown-message" style="display: none;"></div>
+<div id="cooldown-message"></div>
 
 </body>
 </html>
