@@ -135,9 +135,22 @@
 
 <script>
   function redirectToMap() {
-    window.location.href = "geo:49.9456392,14.3150494?q=49.9456392,14.3150494(Mapa)";
+    const geoUri = "geo:49.9456392,14.3150494?q=49.9456392,14.3150494(Mapa)";
+    const webUrl = "https://mapy.cz/zakladni?source=coor&id=14.3150494%2C49.9456392&ds=1";
+
+    // Pokusíme se otevřít geo URI
+    window.location.href = geoUri;
+
+    // Po 1.5 vteřině (pokud uživatel neodešel), otevřeme záložní webovou mapu
+    setTimeout(() => {
+      // Pokud uživatel je stále na stránce, otevřeme webovou mapu
+      if (!document.hidden) {
+        window.location.href = webUrl;
+      }
+    }, 1500);
   }
 </script>
+
 
 <div id="cooldown-message" style="display: none;"></div>
 
