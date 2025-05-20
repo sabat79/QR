@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="cs">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>QR Hra – Otázka 6</title>
   <style>
     body {
@@ -30,7 +30,8 @@
     button:hover {
       background-color: #45a049;
     }
-    #continue-container a {
+    #continue-container a,
+    .continue-button {
       display: inline-block;
       margin-top: 10px;
       padding: 12px 20px;
@@ -40,33 +41,21 @@
       border-radius: 6px;
       font-size: 16px;
     }
-    continue-container a:hover {
+    #continue-container a:hover,
+    .continue-button:hover {
       background-color: #0b7dda;
     }
-    cooldown-message {
+    #cooldown-message {
       font-size: 18px;
       font-weight: bold;
       margin-top: 20px;
     }
-	.continue-button {
-  display: inline-block;
-  margin-top: 20px;
-  padding: 12px 20px;
-  background-color: #2196F3;
-  color: white;
-  text-decoration: none;
-  border-radius: 6px;
-  font-size: 16px;
-}
-.continue-button:hover {
-  background-color: #0b7dda;
-}
-
-	</style>
+  </style>
 </head>
 <body>
 
 <script>
+  // Kontrola hesla na začátku
   if (!localStorage.getItem("access_granted")) {
     var heslo = prompt("Zadej heslo pro vstup:");
     if (heslo !== "casper") {
@@ -77,17 +66,20 @@
     }
   }
 
+  // Funkce pro start cooldown
   function startCooldown() {
-    const cooldownTime = 5 * 60 * 1000;
+    const cooldownTime = 5 * 60 * 1000; // 5 minut
     const unlockTime = Date.now() + cooldownTime;
     localStorage.setItem("cooldown_until", unlockTime.toString());
     localStorage.setItem("question_failed", "true");
     showCooldown();
   }
 
+  // Zobrazování cooldownu
   function showCooldown() {
     const container = document.getElementById("cooldown-message");
     const question = document.getElementById("question-container");
+
     const interval = setInterval(() => {
       const now = Date.now();
       const unlock = parseInt(localStorage.getItem("cooldown_until") || "0");
@@ -97,16 +89,21 @@
         clearInterval(interval);
         localStorage.removeItem("cooldown_until");
         const failed = localStorage.getItem("question_failed") === "true";
+
         question.style.display = "none";
+
         if (failed) {
           container.innerHTML = `
             <p style="color: black;">Zdá se, že tato otázka je pro tebe poněkud složitá.</p>
-            <a href="geo:0,0?q=https://mapy.cz/s/banevazete" target="_blank" class="continue-button">
-  Pokračuj dále
-</a>
-
+            <a href="#" class="continue-button" id="continue-link">Pokračuj dále</a>
           `;
           container.style.display = "block";
+
+          // Přidáme event listener na odkaz, který spustí redirectToMap
+          document.getElementById("continue-link").onclick = function(event) {
+            event.preventDefault();
+            redirectToMap();
+          };
         }
       } else {
         const minutes = Math.floor(diff / 60000);
@@ -124,12 +121,12 @@
     }, 1000);
   }
 
-  <script>
-  // Funkce pro přesměrování na geo URI
+  // Přesměrování do map
   function redirectToMap() {
     window.location.href = "geo:49.9456392,14.3150494?q=49.9456392,14.3150494(Mapa)";
   }
 
+  // Po načtení stránky
   window.onload = function() {
     const cooldownUntil = parseInt(localStorage.getItem("cooldown_until") || "0");
     const failed = localStorage.getItem("question_failed") === "true";
@@ -137,32 +134,31 @@
     if (Date.now() < cooldownUntil) {
       showCooldown();
     } else if (failed) {
+      // Pokud je otázka označena jako nevyřešená, zobraz odkaz k pokračování
+      const container = document.getElementById("cooldown-message");
       document.getElementById("question-container").style.display = "none";
 
-      // Vložíme odkaz, který místo href volá funkci redirectToMap
-      const cooldownMsg = document.getElementById("cooldown-message");
-      cooldownMsg.innerHTML = `
+      container.innerHTML = `
         <p style="color: black;">Zdá se, že tato otázka je pro tebe poněkud složitá.</p>
         <a href="#" class="continue-button" id="continue-link">Pokračuj dále</a>
       `;
-      cooldownMsg.style.display = "block";
+      container.style.display = "block";
 
-      // Přidáme onclick, který spustí redirectToMap
       document.getElementById("continue-link").onclick = function(event) {
-        event.preventDefault();  // zabrání defaultnímu chování odkazu
+        event.preventDefault();
         redirectToMap();
       };
-    }
-  };
-</script>
-
-
-      `;
-      document.getElementById("cooldown-message").style.display = "block";
     } else {
+      // Zobraz otázku pokud není cooldown ani chyba
       document.getElementById("question-container").style.display = "block";
+      document.getElementById("cooldown-message").style.display = "none";
     }
   };
+
+  // Kontrola odpovědi - tady jsou všechny odpovědi špatné
+  function checkAnswer(answer) {
+    startCooldown();
+  }
 </script>
 
 <div id="question-container" style="display: none;">
@@ -174,13 +170,6 @@
 </div>
 
 <div id="cooldown-message" style="display: none;"></div>
-
-<script>
-  function checkAnswer(answer) {
-    // všechny odpovědi jsou špatně
-    startCooldown();
-  }
-</script>
 
 </body>
 </html>
