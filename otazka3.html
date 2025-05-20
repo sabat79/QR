@@ -129,7 +129,13 @@
 <div id="continue-container" style="display: none;">
     <h2>Správně!</h2>
     <a href="#" onclick="redirectToMap(); return false;">Pokračuj dále:</a>
-  </div>
+</div>
+
+<script>
+  function redirectToMap() {
+    window.location.href = "geo:49.9456392,14.3150494?q=49.9456392,14.3150494(Mapa)";
+  }
+</script>
 
 <div id="cooldown-message" style="display: none;"></div>
 
