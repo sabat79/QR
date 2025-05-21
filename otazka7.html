@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="cs">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>QR Hra – Otázka 7</title>
   <style>
     body {
@@ -23,41 +23,41 @@
       font-size: 16px;
       border: none;
       border-radius: 8px;
-      background-color: #4CAF50;
+      background-color: #4caf50;
       color: white;
       cursor: pointer;
     }
     button:hover {
       background-color: #45a049;
     }
-    #continue-container {
-      margin-top: 30px;
-    }
-    #continue-container a {
+    #continue-container a,
+    .continue-button {
       display: inline-block;
       margin-top: 10px;
       padding: 12px 20px;
-      background-color: #2196F3;
+      background-color: #2196f3;
       color: white;
       text-decoration: none;
       border-radius: 6px;
       font-size: 16px;
+      cursor: pointer;
     }
-    #continue-container a:hover {
+    #continue-container a:hover,
+    .continue-button:hover {
       background-color: #0b7dda;
     }
     #cooldown-message {
-      color: red;
+      font-size: 18px;
       font-weight: bold;
       margin-top: 20px;
-      font-size: 18px;
+      display: none;
     }
   </style>
 </head>
 <body>
 
 <script>
-  // Heslo na začátku stránky (nebude se znovu ptát při refreshi)
+  // Kontrola hesla pro přístup
   if (!localStorage.getItem("access_granted")) {
     var heslo = prompt("Zadej heslo pro vstup:");
     if (heslo !== "casper") {
@@ -68,17 +68,22 @@
     }
   }
 
-  // Funkce pro spuštění odpočtu
+  // Spustí cooldown (časový blok po špatné odpovědi)
   function startCooldown() {
-    const cooldownTime = 5 * 60 * 1000; // 5 * 60 * 1000 // 5 minut v milisekundách
+    const cooldownTime = 5 * 60 * 1000; // 5 minut v ms
     const unlockTime = Date.now() + cooldownTime;
     localStorage.setItem("cooldown_until", unlockTime.toString());
+    localStorage.setItem("question_failed", "true");
     showCooldown();
   }
 
+  // Zobrazí odpočet cooldownu
   function showCooldown() {
     const container = document.getElementById("cooldown-message");
     const question = document.getElementById("question-container");
+    question.style.display = "none";
+    container.style.display = "block";
+
     const interval = setInterval(() => {
       const now = Date.now();
       const unlock = parseInt(localStorage.getItem("cooldown_until") || "0");
@@ -87,75 +92,80 @@
       if (diff <= 0) {
         clearInterval(interval);
         localStorage.removeItem("cooldown_until");
-        location.reload(); // Reload bez nového hesla
+
+        container.innerHTML = `
+          <p style="color: black;">Zdá se, že tato otázka je pro tebe poněkud složitá.</p>
+          <a href="#" class="continue-button" id="continue-link">Pokračuj dále</a>
+        `;
+
+        // Po kliknutí přesměruj na mapu
+        document.getElementById("continue-link").onclick = function(event) {
+          event.preventDefault();
+          redirectToMap();
+        };
+
       } else {
         const minutes = Math.floor(diff / 60000);
         const seconds = Math.floor((diff % 60000) / 1000);
-        
-		container.innerHTML = `
-  <div style="color: red;">
-    <p><strong>Špatná odpověď!</strong></p>
-    <p>Počkej <b>${minutes}:${seconds.toString().padStart(2, '0')}</b></p>
-    <p><span style="color: black;">Zatím najdi předmět začínající na <b>"S"</b>.</span></p>
-  </div>
-`;
-
-		question.style.display = "none";
-        container.style.display = "block";
+        container.innerHTML = `
+          <div style="color: red;">
+            <p><strong>Špatná odpověď!</strong></p>
+            <p>Počkej <b>${minutes}:${seconds.toString().padStart(2, '0')}</b></p>
+            <p><span style="color: black;">Zatím jdi cca 10 metrů severně, pod velkým kamenem najdi schránku, obsah pečlivě uschovej!</span></p>
+          </div>
+        `;
       }
     }, 1000);
   }
 
-  // Při načtení stránky zkontroluj, zda je blok aktivní
-  
-  window.onload = function() {
-  const cooldownUntil = parseInt(localStorage.getItem("cooldown_until") || "0");
-  if (Date.now() < cooldownUntil) {
-    showCooldown(); // stále běží penalizace
-  } else {
-    document.getElementById("question-container").style.display = "block"; // zobraz otázky
-  }
-};
-</script>
-
-<div id="question-container" style="display: none;">
-  <h2>Kdo napsal knihu Malý princ?</h2>
-  <button onclick="checkAnswer('a')">a) Antoine de Saint-Exupéry</button>
-  <button onclick="checkAnswer('b')">b) Jules Verne</button>
-  <button onclick="checkAnswer('c')">c) Ernest Hemingway</button>
-  <button onclick="checkAnswer('d')">d) Charles Dickens</button>
-</div>
-
-<div id="continue-container" style="display: none;">
-    <h2>Správně!</h2>
-    <a href="#" onclick="redirectToMap(); return false;">Pokračuj dále:</a>
-</div>
-
-<script>
+  // Přesměrování na geo URI (jen pro Android)
   function redirectToMap() {
     window.location.href = "geo:49.9492533,14.3005039?q=49.9492533,14.3005039(Mapa)";
   }
-</script>
 
-<div id="cooldown-message" style="display: none;"></div>
+  // Po načtení stránky
+  window.onload = function() {
+    const cooldownUntil = parseInt(localStorage.getItem("cooldown_until") || "0");
+    const failed = localStorage.getItem("question_failed") === "true";
 
-<script>
-  function checkAnswer(answer) {
-    if (answer === "a") {
+    if (Date.now() < cooldownUntil) {
+      showCooldown();
+    } else if (failed) {
+      // Pokud už selhal, rovnou nabídni pokračování
       document.getElementById("question-container").style.display = "none";
-      document.getElementById("continue-container").style.display = "block";
+
+      const container = document.getElementById("cooldown-message");
+      container.innerHTML = `
+        <p style="color: black;">Zdá se, že tato otázka je pro tebe poněkud složitá.</p>
+        <a href="#" class="continue-button" id="continue-link">Pokračuj dále</a>
+      `;
+      container.style.display = "block";
+
+      document.getElementById("continue-link").onclick = function(event) {
+        event.preventDefault();
+        redirectToMap();
+      };
     } else {
-      startCooldown();
+      document.getElementById("question-container").style.display = "block";
+      document.getElementById("cooldown-message").style.display = "none";
     }
+  };
+
+  // Kontrola odpovědi – všechny odpovědi jsou špatně
+  function checkAnswer(answer) {
+    startCooldown();
   }
 </script>
 
+<div id="question-container" style="display: none;">
+  <h2>Jaká planeta je nejblíže ke Slunci?</h2>
+  <button onclick="checkAnswer('a')">a) Mars</button>
+  <button onclick="checkAnswer('b')">b) Země</button>
+  <button onclick="checkAnswer('c')">c) Jupiter</button>
+  <button onclick="checkAnswer('d')">d) Saturn</button>
+</div>
+
+<div id="cooldown-message"></div>
+
 </body>
 </html>
-
-  
-  
-  
-  
-  
-  
