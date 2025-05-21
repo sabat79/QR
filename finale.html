@@ -114,15 +114,25 @@
 
 <script>
   // Heslo na začátku stránky (nebude se znovu ptát při refreshi)
-  if (!localStorage.getItem("access_granted")) {
-    var heslo = prompt("Zadej heslo pro vstup:");
-    if (heslo !== "casper") {
-      alert("Špatné heslo. Přístup zamítnut.");
-      window.location.href = "https://seznam.cz";
-    } else {
-      localStorage.setItem("access_granted", "true");
-    }
+  const storedPassword = localStorage.getItem("game_password");
+
+function askForPassword() {
+  const password = prompt("Zadej heslo pro vstup:");
+  if (password === "casper") {
+    localStorage.setItem("game_password", password);
+    document.getElementById("start-button").style.display = "inline-block";
+  } else {
+    alert("Špatné heslo. Přístup zamítnut.");
+    window.location.href = "https://seznam.cz";
   }
+}
+
+if (storedPassword === "casper") {
+  document.getElementById("start-button").style.display = "inline-block";
+} else {
+  askForPassword();
+}
+
 
   // Po kliknutí na "Začít slavit"
   document.getElementById("start-button").addEventListener("click", function () {
