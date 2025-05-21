@@ -113,13 +113,15 @@
 <audio id="celebration-sound" src="https://www.orangefreesounds.com/wp-content/uploads/2017/01/Fanfare-sound.mp3" preload="auto" loop></audio>
 
 <script>
-  // Kontrola hesla
-  const password = prompt("Zadej heslo pro vstup:");
-  if (password !== "casper") {
-    alert("Špatné heslo. Přístup zamítnut.");
-    window.location.href = "https://seznam.cz";
-  } else {
-    document.getElementById("start-button").style.display = "inline-block";
+  // Heslo na začátku stránky (nebude se znovu ptát při refreshi)
+  if (!localStorage.getItem("access_granted")) {
+    var heslo = prompt("Zadej heslo pro vstup:");
+    if (heslo !== "casper") {
+      alert("Špatné heslo. Přístup zamítnut.");
+      window.location.href = "https://seznam.cz";
+    } else {
+      localStorage.setItem("access_granted", "true");
+    }
   }
 
   // Po kliknutí na "Začít slavit"
