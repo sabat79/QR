@@ -119,11 +119,13 @@
 </script>
 
 <div id="question-container" style="display: none;">
-  <h2>Jaká je chemická značka zlata?</h2>
-  <button onclick="checkAnswer('a')">a) Ag</button>
-  <button onclick="checkAnswer('b')">b) Au</button>
-  <button onclick="checkAnswer('c')">c) Zn</button>
-  <button onclick="checkAnswer('d')">d) Hg</button>
+
+  <h2>Říká se, že narozeniny jsou jako levely ve hře. Čím víc jich máš, tím jsi silnější hráč… Ale co víš o narozeninách obecně?</h2>
+  <h2>Který narozeninový dort je ve světě považován za klasiku?</h2>
+  <button onclick="checkAnswer('a')">a) Mrkvový dort</button>
+  <button onclick="checkAnswer('b')">b) Jahodový cheesecake</button>
+  <button onclick="checkAnswer('c')">c) Čokoládový dort</button>
+  <button onclick="checkAnswer('d')">d) Tiramisu</button>
   
 </div>
 
@@ -143,7 +145,7 @@
 
 <script>
   function checkAnswer(answer) {
-    if (answer === "b") {
+    if (answer === "c") {
       document.getElementById("question-container").style.display = "none";
       document.getElementById("continue-container").style.display = "block";
     } else {
