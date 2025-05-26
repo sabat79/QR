@@ -10,6 +10,7 @@
       padding: 20px;
       background-color: #000; /* černé pozadí */
       text-align: center;
+      color: #fff; /* bílý text */
     }
     h2 {
       margin-bottom: 20px;
@@ -94,7 +95,7 @@
         localStorage.removeItem("cooldown_until");
 
         container.innerHTML = `
-          <p style="color: black;">Zdá se, že tato otázka je pro tebe poněkud složitá.</p>
+          <p style="color: white;">Zdá se, že tato otázka je pro tebe poněkud složitá.</p>
           <a href="#" class="continue-button" id="continue-link">Pokračuj dále</a>
         `;
 
@@ -111,7 +112,7 @@
           <div style="color: red;">
             <p><strong>Špatná odpověď!</strong></p>
             <p>Počkej <b>${minutes}:${seconds.toString().padStart(2, '0')}</b></p>
-            <p><span style="color: black;">Zatím jdi cca 10 metrů severně, pod velkým kamenem najdi schránku, obsah pečlivě uschovej!</span></p>
+            <p><span style="color: white;">Zatím jdi cca 10 metrů severně, pod velkým kamenem najdi schránku, obsah pečlivě uschovej!</span></p>
           </div>
         `;
       }
